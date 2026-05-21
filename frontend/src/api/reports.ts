@@ -32,6 +32,15 @@ export async function downloadReport(path: string, filename: string): Promise<vo
   URL.revokeObjectURL(url);
 }
 
-export function periodQuery(month: number, year: number): string {
-  return `month=${month}&year=${year}`;
+export function periodQuery(month: number, year: number, organisme?: string): string {
+  const params = new URLSearchParams({
+    month: String(month),
+    year: String(year),
+  });
+
+  if (organisme) {
+    params.set('organisme', organisme);
+  }
+
+  return params.toString();
 }

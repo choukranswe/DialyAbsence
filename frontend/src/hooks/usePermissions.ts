@@ -6,10 +6,10 @@ export function usePermissions() {
   return {
     user,
     isAdmin: user?.role === 'admin',
-    isMedecin: user?.role === 'medecin',
-    isInfirmier: user?.role === 'infirmier',
+    isMedecin: user?.role === 'doctor',
+    isReceptionist: user?.role === 'receptionist',
     canManageUsers: user?.role === 'admin',
-    canArchivePatients: user?.role === 'admin' || user?.role === 'medecin',
-    canEditClinicalData: user?.role === 'admin' || user?.role === 'medecin' || user?.role === 'infirmier',
+    canArchivePatients: user?.role === 'admin' || user?.role === 'doctor',
+    canEditClinicalData: user?.role === 'admin' || user?.role === 'doctor' || user?.role === 'receptionist',
   };
 }

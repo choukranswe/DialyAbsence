@@ -32,8 +32,21 @@ export function PatientTable({ patients, loading, page, lastPage, total, onPageC
       ),
     },
     { key: 'telephone', header: 'Telephone', render: (patient) => patient.telephone },
-    { key: 'ville', header: 'Ville', sortable: true, sortValue: (patient) => patient.ville, render: (patient) => patient.ville },
-    { key: 'groupe', header: 'Groupe', render: (patient) => patient.groupe_sanguin },
+    { key: 'dialysis_group', header: 'Groupe dialyse', sortable: true, sortValue: (patient) => patient.dialysis_group ?? '', render: (patient) => patient.dialysis_group ?? '-' },
+    { key: 'machine', header: 'Machine', render: (patient) => patient.assigned_machine?.numero ?? '-' },
+    {
+      key: 'organisme',
+      header: 'Organisme',
+      sortable: true,
+      sortValue: (patient) => patient.organisme ?? '',
+      render: (patient) => (
+        <div>
+          <div className="font-semibold text-slate-800">{patient.organisme ?? '-'}</div>
+          {patient.insurance_number && <div className="text-xs text-slate-500">{patient.insurance_number}</div>}
+        </div>
+      ),
+    },
+    { key: 'groupe', header: 'Sang', render: (patient) => patient.groupe_sanguin },
     { key: 'age', header: 'Age', sortable: true, sortValue: (patient) => patient.age, render: (patient) => `${patient.age} ans` },
     { key: 'statut', header: 'Statut', render: (patient) => <StatusBadge type="patient" value={patient.actif} /> },
     {

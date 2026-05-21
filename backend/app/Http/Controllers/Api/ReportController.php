@@ -16,16 +16,31 @@ class ReportController extends Controller
 
     public function monthlyAttendance(Request $request)
     {
-        [$month, $year] = $this->validatedPeriod($request);
+        $filters = $this->validatedMonthlyFilters($request);
 
-        return $this->reportService->generateMonthlyAttendancePDF($month, $year);
+        return $this->reportService->generateMonthlyAttendancePDF($filters['month'], $filters['year'], $filters);
     }
 
     public function monthlyAbsences(Request $request)
     {
-        [$month, $year] = $this->validatedPeriod($request);
+        $filters = $this->validatedMonthlyFilters($request);
 
-        return $this->reportService->generateMonthlyAbsencesPDF($month, $year);
+        return $this->reportService->generateMonthlyAbsencesPDF($filters['month'], $filters['year'], $filters);
+    }
+
+    public function patientAbsences(Request $request): BinaryFileResponse
+    {
+        return $this->reportService->exportAbsencesExcel($this->validatedReportFilters($request));
+    }
+
+    public function attendance(Request $request): BinaryFileResponse
+    {
+        return $this->reportService->exportAttendanceExcel($this->validatedReportFilters($request));
+    }
+
+    public function leaves(Request $request): BinaryFileResponse
+    {
+        return $this->reportService->exportLeavesExcel($this->validatedReportFilters($request));
     }
 
     public function patientFiche(Patient $patient)
@@ -35,18 +50,41 @@ class ReportController extends Controller
 
     public function cnssExport(Request $request): BinaryFileResponse
     {
-        [$month, $year] = $this->validatedPeriod($request);
+        $filters = $this->validatedMonthlyFilters($request);
 
-        return $this->reportService->exportCNSSExcel($month, $year);
+        return $this->reportService->exportCNSSExcel($filters['month'], $filters['year'], $filters);
     }
 
-    private function validatedPeriod(Request $request): array
+    private function validatedMonthlyFilters(Request $request): array
     {
         $validated = $request->validate([
             'month' => ['required', 'integer', 'between:1,12'],
             'year' => ['required', 'integer', 'between:2020,2100'],
+            'organisme' => ['nullable', 'string', 'max:120'],
         ]);
 
-        return [(int) $validated['month'], (int) $validated['year']];
+        $validated['month'] = (int) $validated['month'];
+        $validated['year'] = (int) $validated['year'];
+        $validated['organisme'] = trim((string) ($validated['organisme'] ?? '')) ?: null;
+
+        return $validated;
+    }
+
+    private function validatedReportFilters(Request $request): array
+    {
+        $validated = $request->validate([
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'patient_id' => ['nullable', 'integer', 'exists:patients,id'],
+            'nurse_id' => ['nullable', 'integer', 'exists:nurses,id'],
+            'organisme' => ['nullable', 'string', 'max:120'],
+            'status' => ['nullable', 'string', 'max:40'],
+        ]);
+
+        foreach (['from', 'to', 'organisme', 'status'] as $key) {
+            $validated[$key] = trim((string) ($validated[$key] ?? '')) ?: null;
+        }
+
+        return $validated;
     }
 }

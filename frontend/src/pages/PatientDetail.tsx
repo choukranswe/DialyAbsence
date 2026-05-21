@@ -23,7 +23,7 @@ export function PatientDetail() {
     { key: 'date', header: 'Date', render: (seance) => formatDate(seance.date_seance), sortValue: (seance) => seance.date_seance, sortable: true },
     { key: 'heure', header: 'Heure', render: (seance) => `${seance.heure_debut} - ${seance.heure_fin}` },
     { key: 'machine', header: 'Machine', render: (seance) => seance.machine?.numero },
-    { key: 'infirmier', header: 'Infirmier', render: (seance) => seance.infirmier?.nom_complet ?? '-' },
+    { key: 'nurse', header: 'Infirmier', render: (seance) => seance.nurse?.full_name ?? '-' },
     { key: 'statut', header: 'Statut', render: (seance) => <StatusBadge type="seance" value={seance.statut} /> },
   ];
 

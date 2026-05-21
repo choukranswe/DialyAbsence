@@ -20,7 +20,7 @@
 </head>
 <body>
     <h1>Resume mensuel des absences</h1>
-    <div class="muted">{{ config('app.name') }} - {{ $period }}</div>
+    <div class="muted">{{ config('app.name') }} - {{ $period }}@if ($organisme) - Organisme: {{ $organisme }}@endif</div>
 
     <table class="summary">
         <tr>
@@ -42,6 +42,7 @@
                 <th>Date</th>
                 <th>Patient</th>
                 <th>CIN</th>
+                <th>Organisme</th>
                 <th>Motif</th>
                 <th>Justifiee</th>
                 <th>Declare par</th>
@@ -54,13 +55,14 @@
                     <td>{{ $absence->date_absence?->format('d/m/Y') }}</td>
                     <td>{{ $absence->patient?->nom_complet }}</td>
                     <td>{{ $absence->patient?->cin }}</td>
+                    <td>{{ $absence->patient?->organisme ?? '-' }}</td>
                     <td>{{ $absence->motif }}</td>
                     <td class="{{ $absence->justifiee ? 'ok' : 'danger' }}">{{ $absence->justifiee ? 'Oui' : 'Non' }}</td>
                     <td>{{ $absence->declarant?->nom_complet ?? '-' }}</td>
                     <td>{{ $absence->notes ?? '-' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="7">Aucune absence pour cette periode.</td></tr>
+                <tr><td colspan="8">Aucune absence pour cette periode.</td></tr>
             @endforelse
         </tbody>
     </table>

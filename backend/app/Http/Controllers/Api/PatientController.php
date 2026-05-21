@@ -30,18 +30,22 @@ class PatientController extends Controller
         $perPage = min((int) $request->integer('per_page', 15), 100);
 
         $patients = Patient::query()
-            ->with('nephrologue')
+            ->with(['nephrologue', 'assignedMachine'])
             ->withCount(['seances', 'absences'])
             ->when($request->filled('search'), function ($query) use ($request): void {
                 $search = $request->string('search')->toString();
                 $query->where(function ($query) use ($search): void {
                     $query->where('nom', 'like', "%{$search}%")
                         ->orWhere('prenom', 'like', "%{$search}%")
-                        ->orWhere('cin', 'like', "%{$search}%");
+                        ->orWhere('cin', 'like', "%{$search}%")
+                        ->orWhere('insurance_number', 'like', "%{$search}%");
                 });
             })
             ->when($request->filled('statut') && $request->statut !== 'tous', function ($query) use ($request): void {
                 $query->where('actif', $request->statut === 'actif');
+            })
+            ->when($request->filled('organisme') && $request->organisme !== 'tous', function ($query) use ($request): void {
+                $query->where('organisme', $request->string('organisme')->toString());
             })
             ->orderBy('nom')
             ->orderBy('prenom')
@@ -54,7 +58,7 @@ class PatientController extends Controller
     public function store(StorePatientRequest $request): JsonResponse
     {
         $patient = Patient::create($request->validated());
-        $patient->load('nephrologue')->loadCount(['seances', 'absences']);
+        $patient->load(['nephrologue', 'assignedMachine'])->loadCount(['seances', 'absences']);
         $this->auditService->log('create', 'patients', $patient->id, null, $patient->toArray());
         $request->attributes->set('audit_logged', true);
 
@@ -91,7 +95,7 @@ class PatientController extends Controller
 
     public function show(Patient $patient): JsonResponse
     {
-        $patient->load('nephrologue')->loadCount(['seances', 'absences']);
+        $patient->load(['nephrologue', 'assignedMachine'])->loadCount(['seances', 'absences']);
 
         return $this->success(new PatientResource($patient), 'Patient recupere avec succes');
     }
@@ -100,7 +104,7 @@ class PatientController extends Controller
     {
         $old = $patient->getOriginal();
         $patient->update($request->validated());
-        $patient->load('nephrologue')->loadCount(['seances', 'absences']);
+        $patient->load(['nephrologue', 'assignedMachine'])->loadCount(['seances', 'absences']);
         $this->auditService->log('update', 'patients', $patient->id, $old, $patient->toArray());
         $request->attributes->set('audit_logged', true);
 
@@ -111,7 +115,7 @@ class PatientController extends Controller
     {
         $old = $patient->getOriginal();
         $patient->update(['actif' => false]);
-        $patient->load('nephrologue')->loadCount(['seances', 'absences']);
+        $patient->load(['nephrologue', 'assignedMachine'])->loadCount(['seances', 'absences']);
         $this->auditService->log('delete', 'patients', $patient->id, $old, $patient->toArray());
         $request->attributes->set('audit_logged', true);
 
@@ -122,7 +126,7 @@ class PatientController extends Controller
     {
         $perPage = min((int) $request->integer('per_page', 15), 100);
         $seances = $patient->seances()
-            ->with(['patient', 'machine', 'infirmier'])
+            ->with(['patient', 'machine', 'nurse'])
             ->orderByDesc('date_seance')
             ->paginate($perPage);
 

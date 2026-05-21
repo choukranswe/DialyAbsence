@@ -7,6 +7,8 @@ const titles: Record<string, string> = {
   '/patients': 'Patients',
   '/seances': 'Seances',
   '/absences': 'Absences',
+  '/nurses': 'Personnel infirmier',
+  '/staff-leaves': 'Conges du personnel',
   '/machines': 'Machines',
   '/reports': 'Rapports',
   '/users': 'Utilisateurs',

@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MachineController;
+use App\Http\Controllers\Api\NurseController;
+use App\Http\Controllers\Api\NurseLeaveController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SeanceController;
@@ -35,8 +37,18 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::apiResource('machines', MachineController::class)->only(['index', 'store', 'update'])->middleware('audit');
 
+    Route::apiResource('nurses', NurseController::class)->middleware('audit');
+    Route::post('/nurse-leaves/{nurse_leave}/approve', [NurseLeaveController::class, 'approve'])->middleware('audit');
+    Route::post('/nurse-leaves/{nurse_leave}/refuse', [NurseLeaveController::class, 'refuse'])->middleware('audit');
+    Route::apiResource('nurse-leaves', NurseLeaveController::class)
+        ->parameters(['nurse-leaves' => 'nurse_leave'])
+        ->middleware('audit');
+
     Route::get('/reports/monthly-attendance', [ReportController::class, 'monthlyAttendance']);
     Route::get('/reports/monthly-absences', [ReportController::class, 'monthlyAbsences']);
+    Route::get('/reports/patient-absences', [ReportController::class, 'patientAbsences']);
+    Route::get('/reports/attendance', [ReportController::class, 'attendance']);
+    Route::get('/reports/leaves', [ReportController::class, 'leaves']);
     Route::get('/reports/patient-fiche/{patient}', [ReportController::class, 'patientFiche']);
     Route::get('/reports/cnss-export', [ReportController::class, 'cnssExport']);
 

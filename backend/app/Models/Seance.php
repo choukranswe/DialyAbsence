@@ -13,7 +13,7 @@ class Seance extends Model
     protected $fillable = [
         'patient_id',
         'machine_id',
-        'infirmier_id',
+        'nurse_id',
         'date_seance',
         'heure_debut',
         'heure_fin',
@@ -48,8 +48,8 @@ class Seance extends Model
         return $this->belongsTo(Machine::class);
     }
 
-    public function infirmier(): BelongsTo
+    public function nurse(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'infirmier_id');
+        return $this->belongsTo(Nurse::class);
     }
 }

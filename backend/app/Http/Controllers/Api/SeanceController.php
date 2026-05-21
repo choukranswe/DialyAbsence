@@ -23,7 +23,7 @@ class SeanceController extends Controller
     public function index(Request $request): JsonResponse
     {
         $perPage = min((int) $request->integer('per_page', 50), 150);
-        $seances = Seance::with(['patient', 'machine', 'infirmier'])
+        $seances = Seance::with(['patient', 'machine', 'nurse'])
             ->when($request->filled('date'), fn ($query) => $query->whereDate('date_seance', $request->date))
             ->when($request->filled('patient_id'), fn ($query) => $query->where('patient_id', $request->patient_id))
             ->when($request->filled('machine_id'), fn ($query) => $query->where('machine_id', $request->machine_id))
@@ -39,7 +39,7 @@ class SeanceController extends Controller
     public function store(StoreSeanceRequest $request): JsonResponse
     {
         $seance = Seance::create($request->validated());
-        $seance->load(['patient', 'machine', 'infirmier']);
+        $seance->load(['patient', 'machine', 'nurse']);
         $this->auditService->log('create', 'seances', $seance->id, null, $seance->toArray());
         $request->attributes->set('audit_logged', true);
 
@@ -48,7 +48,7 @@ class SeanceController extends Controller
 
     public function show(Seance $seance): JsonResponse
     {
-        $seance->load(['patient', 'machine', 'infirmier']);
+        $seance->load(['patient', 'machine', 'nurse']);
 
         return $this->success(new SeanceResource($seance), 'Seance recuperee avec succes');
     }
@@ -57,7 +57,7 @@ class SeanceController extends Controller
     {
         $old = $seance->getOriginal();
         $seance->update($request->validated());
-        $seance->load(['patient', 'machine', 'infirmier']);
+        $seance->load(['patient', 'machine', 'nurse']);
         $this->auditService->log('update', 'seances', $seance->id, $old, $seance->toArray());
         $request->attributes->set('audit_logged', true);
 
@@ -76,7 +76,7 @@ class SeanceController extends Controller
 
     public function today(): JsonResponse
     {
-        $seances = Seance::with(['patient', 'machine', 'infirmier'])
+        $seances = Seance::with(['patient', 'machine', 'nurse'])
             ->whereDate('date_seance', today())
             ->orderBy('heure_debut')
             ->get();
@@ -91,7 +91,7 @@ class SeanceController extends Controller
             : Carbon::now()->startOfWeek();
         $end = $start->copy()->addDays(5)->endOfDay();
 
-        $seances = Seance::with(['patient', 'machine', 'infirmier'])
+        $seances = Seance::with(['patient', 'machine', 'nurse'])
             ->whereBetween('date_seance', [$start->toDateString(), $end->toDateString()])
             ->orderBy('date_seance')
             ->orderBy('heure_debut')

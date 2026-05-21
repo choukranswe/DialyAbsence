@@ -19,7 +19,7 @@ export const useAuthStore = create<AuthState>()(
       setAuth: (user, token) => set({ user, token }),
       clearAuth: () => set({ user: null, token: null }),
       isAdmin: () => get().user?.role === 'admin',
-      isMedecin: () => get().user?.role === 'medecin',
+      isMedecin: () => get().user?.role === 'doctor',
     }),
     {
       name: 'dialyse-auth-storage',

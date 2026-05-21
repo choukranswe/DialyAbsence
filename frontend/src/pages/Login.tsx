@@ -69,7 +69,7 @@ export function Login() {
         </form>
 
         <div className="mt-6 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
-          admin@dialyse.ma / password
+          admin@dialyse.ma, doctor@dialyse.ma, reception@dialyse.ma / password
         </div>
       </section>
     </main>

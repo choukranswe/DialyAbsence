@@ -24,7 +24,7 @@ class StoreUserRequest extends BaseApiRequest
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'password' => [$isUpdate ? 'nullable' : 'required', 'string', 'min:8'],
-            'role' => ['required', Rule::in(['admin', 'medecin', 'infirmier'])],
+            'role' => ['required', Rule::in(['admin', 'doctor', 'receptionist'])],
             'telephone' => ['nullable', 'regex:/^(05|06|07)[0-9]{8}$/'],
             'actif' => ['boolean'],
         ];

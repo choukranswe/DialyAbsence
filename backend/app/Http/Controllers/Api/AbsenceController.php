@@ -85,6 +85,6 @@ class AbsenceController extends Controller
 
     public function export(Request $request): BinaryFileResponse
     {
-        return $this->reportService->exportAbsencesExcel($request->only(['patient_id', 'from', 'to', 'motif', 'justifiee']));
+        return $this->reportService->exportAbsencesExcel($request->only(['patient_id', 'from', 'to', 'motif', 'justifiee', 'organisme']));
     }
 }

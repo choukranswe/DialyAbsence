@@ -3,18 +3,16 @@ import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { fetchMachines } from '../api/machines';
+import { fetchNurses } from '../api/nurses';
 import { fetchPatients } from '../api/patients';
 import { createSeance, deleteSeance, fetchWeekSeances, updateSeance } from '../api/seances';
-import { fetchUsers } from '../api/users';
 import { SeanceCalendar } from '../components/seances/SeanceCalendar';
 import { SeanceForm } from '../components/seances/SeanceForm';
 import { ConfirmDialog } from '../components/shared/ConfirmDialog';
-import { usePermissions } from '../hooks/usePermissions';
 import type { Seance, SeancePayload } from '../types';
 
 export function Seances() {
   const queryClient = useQueryClient();
-  const { isAdmin } = usePermissions();
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date()));
   const [selected, setSelected] = useState<Seance | null>(null);
   const [initialSlot, setInitialSlot] = useState<{ date: string; start: string; end: string } | null>(null);
@@ -24,7 +22,7 @@ export function Seances() {
   const weekQuery = useQuery({ queryKey: ['seances', 'week', weekStart], queryFn: () => fetchWeekSeances(weekStart), staleTime: 2 * 60 * 1000 });
   const patientsQuery = useQuery({ queryKey: ['patients', 'active-list'], queryFn: () => fetchPatients({ statut: 'actif', per_page: 100 }), staleTime: 2 * 60 * 1000 });
   const machinesQuery = useQuery({ queryKey: ['machines'], queryFn: fetchMachines, staleTime: 2 * 60 * 1000 });
-  const infirmiersQuery = useQuery({ queryKey: ['users', 'infirmiers'], queryFn: () => fetchUsers({ role: 'infirmier', per_page: 100 }), enabled: isAdmin, staleTime: 2 * 60 * 1000 });
+  const nursesQuery = useQuery({ queryKey: ['nurses', 'active-list'], queryFn: () => fetchNurses({ status: 'active', per_page: 100 }), staleTime: 2 * 60 * 1000 });
 
   const saveMutation = useMutation({
     mutationFn: (payload: SeancePayload) => (selected ? updateSeance(selected.id, payload) : createSeance(payload)),
@@ -83,7 +81,7 @@ export function Seances() {
         initialSlot={initialSlot}
         patients={patientsQuery.data?.data ?? []}
         machines={machinesQuery.data ?? []}
-        infirmiers={infirmiersQuery.data?.data ?? []}
+        nurses={nursesQuery.data?.data ?? []}
         loading={saveMutation.isPending}
         onSubmit={(payload) => saveMutation.mutate(payload)}
         onDelete={() => selected && setDeleteTarget(selected)}

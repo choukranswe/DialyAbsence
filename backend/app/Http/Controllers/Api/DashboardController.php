@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SeanceResource;
 use App\Models\Absence;
 use App\Models\Machine;
+use App\Models\Nurse;
+use App\Models\NurseLeave;
 use App\Models\Patient;
 use App\Models\Seance;
 use App\Traits\ApiResponse;
@@ -24,12 +26,22 @@ class DashboardController extends Controller
         $monthlyAbsences = Absence::whereBetween('date_absence', [$start, $end])->count();
 
         return $this->success([
+            'active_patients' => Patient::where('actif', true)->count(),
+            'patient_absences_today' => Absence::whereDate('date_absence', today())->count(),
+            'active_nurses' => Nurse::where('status', 'active')->count(),
+            'nurses_on_leave_today' => NurseLeave::where('status', 'approved')
+                ->whereDate('start_date', '<=', today())
+                ->whereDate('end_date', '>=', today())
+                ->distinct('nurse_id')
+                ->count('nurse_id'),
+            'pending_leave_requests' => NurseLeave::where('status', 'pending')->count(),
+            'dialysis_sessions_today' => Seance::whereDate('date_seance', today())->count(),
             'patients_actifs' => Patient::where('actif', true)->count(),
             'seances_aujourdhui' => Seance::whereDate('date_seance', today())->count(),
             'absences_ce_mois' => $monthlyAbsences,
             'machines_disponibles' => Machine::where('statut', 'disponible')->count(),
             'taux_absence_mois' => $monthlySeances + $monthlyAbsences === 0 ? 0 : round(($monthlyAbsences / ($monthlySeances + $monthlyAbsences)) * 100, 2),
-            'seances_du_jour' => SeanceResource::collection(Seance::with(['patient', 'machine', 'infirmier'])->whereDate('date_seance', today())->orderBy('heure_debut')->get())->resolve(request()),
+            'seances_du_jour' => SeanceResource::collection(Seance::with(['patient', 'machine', 'nurse'])->whereDate('date_seance', today())->orderBy('heure_debut')->get())->resolve(request()),
         ], 'Statistiques tableau de bord recuperees');
     }
 

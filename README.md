@@ -1,22 +1,32 @@
-# DialyAbsence
+# DialyAbsence - Centre de Dialyse les Chenes
 
-Secure local web application for a dialysis center to manage patient attendance, absences, delays, daily sessions, reports, users, and activity logs.
+Secure local-network web application for Centre de Dialyse les Chenes to manage patients, dialysis sessions, patient absences, nursing staff, staff leave, reports, users, and audit logs.
 
-The app is intended for a private dialysis center network. Do not expose the backend or database directly to the public internet.
+The app is intended to run inside the dialysis center only. Do not expose the frontend, backend, or database directly to the public internet.
+
+## Scope
+
+- Login users: Admin, Doctor, Receptionist only.
+- Center doctor: Dr Mouna Mjabber.
+- Nurses are not login users. They are managed in the Personnel Infirmier module.
+- Personnel Infirmier: list, add, edit, archive, and view nurse details.
+- Conges du personnel: create/edit leave requests, approve/refuse leave, calendar, history, and filters by nurse/date.
+- Dashboard: active patients, patient absences today, active nurses, nurses on leave today, pending leave requests, and dialysis sessions today.
+- Reports: patient absences, staff leave, attendance, CNSS/AMO, with date, patient, nurse, and organisme filters where applicable.
 
 ## Stack
 
 - Backend: Laravel 12 API, Laravel Sanctum, MySQL
 - Frontend: React, Vite, TailwindCSS, Recharts
 - Roles: Admin, Doctor, Receptionist
-- Exports: PDF, Excel, browser print from the Reports page
+- Exports: PDF and Excel from the Reports page
 
 ## Folder Structure
 
 ```text
 DialyAbsence/
-├── backend/    Laravel API
-└── frontend/   React Vite UI
+|- backend/    Laravel API
+`- frontend/   React Vite UI
 ```
 
 ## Backend Setup
@@ -82,29 +92,34 @@ All demo accounts use the password:
 password
 ```
 
-- Admin: `admin@dialyabsence.local`
-- Doctor: `doctor@dialyabsence.local`
-- Receptionist: `reception@dialyabsence.local`
+- Admin: `admin@dialyse.ma`
+- Doctor: `doctor@dialyse.ma`
+- Receptionist: `reception@dialyse.ma`
 
 ## Main API Endpoints
 
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
-- `GET /api/dashboard`
+- `GET /api/dashboard/stats`
 - `apiResource /api/patients`
-- `apiResource /api/sessions`
-- `POST /api/sessions/{session}/attendance`
+- `apiResource /api/seances`
 - `apiResource /api/absences`
+- `apiResource /api/nurses`
+- `apiResource /api/nurse-leaves`
+- `POST /api/nurse-leaves/{nurse_leave}/approve`
+- `POST /api/nurse-leaves/{nurse_leave}/refuse`
 - `GET /api/reports/attendance`
+- `GET /api/reports/patient-absences`
+- `GET /api/reports/leaves`
 - `apiResource /api/users` admin only
-- `GET /api/activity-logs` admin only
 
 ## Security Notes
 
 - Passwords are hashed by Laravel's hashed cast.
 - API routes are protected with Sanctum bearer tokens.
-- Role authorization is enforced with `role` middleware and request policies.
-- Patient and attendance data are only returned from authenticated API routes.
-- Important actions are written to `activity_logs`.
+- Role authorization is enforced with `role` middleware where needed.
+- Patient, nurse, leave, and attendance data are only returned from authenticated API routes.
+- Important actions are written to `audit_logs`.
 - Keep MySQL bound to localhost or the private LAN host only.
+- Keep router/firewall access restricted to internal staff devices on the center network.

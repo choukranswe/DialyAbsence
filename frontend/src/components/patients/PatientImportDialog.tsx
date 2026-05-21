@@ -65,8 +65,8 @@ export function PatientImportDialog({ open, loading, onImport, onClose }: Patien
   };
 
   const downloadTemplate = () => {
-    const headers = ['nom', 'prenom', 'CIN', 'telephone', 'date_naissance', 'statut'];
-    const example = ['El Amrani', 'Salma', 'AB123456', '0612345678', '1980-05-12', 'actif'];
+    const headers = ['nom', 'prenom', 'cin', 'telephone', 'date_naissance', 'organisme', 'numero_assurance', 'groupe_dialyse', 'statut'];
+    const example = ['El Amrani', 'Salma', 'AB123456', '0612345678', '1980-05-12', 'CNSS', 'CNSS123456789', 'L/M/V', 'actif'];
     const csv = `${headers.join(',')}\n${example.join(',')}\n`;
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     const link = document.createElement('a');
@@ -126,7 +126,7 @@ export function PatientImportDialog({ open, loading, onImport, onClose }: Patien
           {error && <p className="text-sm font-semibold text-[#DC2626]">{error}</p>}
 
           <div className="rounded-md border border-slate-200 bg-white p-3 text-sm text-slate-600">
-            Colonnes requises : nom, pr&eacute;nom, CIN, t&eacute;l&eacute;phone, date naissance, statut.
+            Colonnes requises : nom, pr&eacute;nom, CIN, t&eacute;l&eacute;phone, date naissance, organisme, groupe dialyse, statut.
           </div>
 
           <div className="flex flex-col-reverse gap-2 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">

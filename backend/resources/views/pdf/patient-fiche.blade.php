@@ -41,6 +41,12 @@
             <td><span class="label">Statut</span><br>{{ $patient->actif ? 'Actif' : 'Archive' }}</td>
         </tr>
         <tr>
+            <td><span class="label">Organisme</span><br>{{ $patient->organisme ?? '-' }}</td>
+            <td><span class="label">Numero assurance</span><br>{{ $patient->insurance_number ?? '-' }}</td>
+            <td><span class="label">Type couverture</span><br>{{ $patient->coverage_type ?? '-' }}</td>
+            <td><span class="label">Expiration couverture</span><br>{{ $patient->coverage_expiration?->format('d/m/Y') ?? '-' }}</td>
+        </tr>
+        <tr>
             <td colspan="2"><span class="label">Adresse</span><br>{{ $patient->adresse }}</td>
             <td colspan="2"><span class="label">Cause insuffisance renale</span><br>{{ $patient->cause_insuffisance_renale }}</td>
         </tr>
@@ -63,7 +69,7 @@
                     <td>{{ $seance->date_seance?->format('d/m/Y') }}</td>
                     <td>{{ substr($seance->heure_debut, 0, 5) }} - {{ substr($seance->heure_fin, 0, 5) }}</td>
                     <td>{{ $seance->machine?->numero }}</td>
-                    <td>{{ $seance->infirmier?->nom_complet ?? '-' }}</td>
+                    <td>{{ $seance->nurse?->full_name ?? '-' }}</td>
                     <td>{{ $seance->statut }}</td>
                 </tr>
             @empty

@@ -4,6 +4,7 @@ import type { Absence, ApiResponse, PaginatedResponse, Patient, PatientPayload, 
 export interface PatientFilters {
   search?: string;
   statut?: 'actif' | 'inactif' | 'tous';
+  organisme?: string;
   per_page?: number;
   page?: number;
 }

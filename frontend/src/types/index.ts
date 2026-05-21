@@ -1,9 +1,12 @@
-export type Role = 'admin' | 'medecin' | 'infirmier';
+export type Role = 'admin' | 'doctor' | 'receptionist';
 export type Sexe = 'M' | 'F';
 export type GroupeSanguin = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
 export type SeanceStatut = 'planifiee' | 'effectuee' | 'annulee';
 export type AbsenceMotif = 'medical' | 'personnel' | 'hospitalise' | 'autre';
 export type MachineStatut = 'disponible' | 'en_utilisation' | 'maintenance' | 'hors_service';
+export type NurseStatus = 'active' | 'inactive';
+export type LeaveType = 'annual_leave' | 'sick_leave' | 'exceptional_leave' | 'vacation' | 'rest_day';
+export type LeaveStatus = 'pending' | 'approved' | 'refused' | 'cancelled';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -55,6 +58,7 @@ export interface Patient {
   age: number;
   sexe: Sexe;
   telephone: string;
+  emergency_contact?: string | null;
   adresse: string;
   ville: string;
   groupe_sanguin: GroupeSanguin;
@@ -65,9 +69,28 @@ export interface Patient {
   nephrologue?: Pick<User, 'id' | 'nom_complet' | 'email'> | null;
   date_entree: string;
   actif: boolean;
-  notes?: string | null;
+  notes?: string | null; 
+  organisme?: string | null;
+  insurance_number?: string | null;
+  dialysis_group?: 'L/M/V' | 'M/J/S' | null;
+  assigned_machine_id?: number | null;
+  assigned_machine?: Pick<Machine, 'id' | 'numero' | 'statut'> | null;
+  coverage_type?: string | null;
+  coverage_expiration?: string | null;
   nombre_seances: number;
   nombre_absences: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Nurse {
+  id: number;
+  full_name: string;
+  phone?: string | null;
+  shift?: string | null;
+  status: NurseStatus;
+  notes?: string | null;
+  leaves_count?: number | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -90,8 +113,8 @@ export interface Seance {
   patient: Pick<Patient, 'id' | 'nom' | 'prenom' | 'nom_complet' | 'cin'>;
   machine_id: number;
   machine: Pick<Machine, 'id' | 'numero' | 'statut'>;
-  infirmier_id?: number | null;
-  infirmier?: Pick<User, 'id' | 'nom_complet'> | null;
+  nurse_id?: number | null;
+  nurse?: Pick<Nurse, 'id' | 'full_name' | 'phone' | 'shift'> | null;
   date_seance: string;
   heure_debut: string;
   heure_fin: string;
@@ -103,6 +126,22 @@ export interface Seance {
   poids_apres?: string | number | null;
   poids_sec?: string | number | null;
   observations?: string | null;
+}
+
+export interface NurseLeave {
+  id: number;
+  nurse_id: number;
+  nurse?: Pick<Nurse, 'id' | 'full_name' | 'phone' | 'shift'> | null;
+  start_date: string;
+  end_date: string;
+  leave_type: LeaveType;
+  reason?: string | null;
+  status: LeaveStatus;
+  approved_by?: number | null;
+  approver?: Pick<User, 'id' | 'nom_complet' | 'email'> | null;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Absence {
@@ -120,6 +159,12 @@ export interface Absence {
 }
 
 export interface DashboardStats {
+  active_patients: number;
+  patient_absences_today: number;
+  active_nurses: number;
+  nurses_on_leave_today: number;
+  pending_leave_requests: number;
+  dialysis_sessions_today: number;
   patients_actifs: number;
   seances_aujourdhui: number;
   absences_ce_mois: number;
@@ -153,8 +198,10 @@ export interface PatientStats {
   taux_presence: number;
 }
 
-export type PatientPayload = Omit<Patient, 'id' | 'nom_complet' | 'age' | 'nephrologue' | 'nombre_seances' | 'nombre_absences' | 'created_at' | 'updated_at'>;
-export type SeancePayload = Omit<Seance, 'id' | 'patient' | 'machine' | 'infirmier'>;
+export type PatientPayload = Omit<Patient, 'id' | 'nom_complet' | 'age' | 'nephrologue' | 'assigned_machine' | 'nombre_seances' | 'nombre_absences' | 'created_at' | 'updated_at'>;
+export type NursePayload = Omit<Nurse, 'id' | 'leaves_count' | 'created_at' | 'updated_at'>;
+export type NurseLeavePayload = Omit<NurseLeave, 'id' | 'nurse' | 'approver' | 'approved_by' | 'created_at' | 'updated_at'>;
+export type SeancePayload = Omit<Seance, 'id' | 'patient' | 'machine' | 'nurse'>;
 export type AbsencePayload = Omit<Absence, 'id' | 'patient' | 'seance' | 'declarant' | 'declared_by'>;
 export type MachinePayload = Omit<Machine, 'id' | 'seances_count'>;
 export type UserPayload = Omit<User, 'id' | 'nom_complet' | 'created_at' | 'updated_at'> & { password?: string };

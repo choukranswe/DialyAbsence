@@ -11,7 +11,7 @@ class StoreSeanceRequest extends BaseApiRequest
         return [
             'patient_id' => ['required', 'exists:patients,id'],
             'machine_id' => ['required', 'exists:machines,id'],
-            'infirmier_id' => ['nullable', Rule::exists('users', 'id')->where('role', 'infirmier')],
+            'nurse_id' => ['nullable', Rule::exists('nurses', 'id')->where('status', 'active')],
             'date_seance' => ['required', 'date'],
             'heure_debut' => ['required', 'date_format:H:i'],
             'heure_fin' => ['required', 'date_format:H:i', 'after:heure_debut'],
@@ -33,7 +33,7 @@ class StoreSeanceRequest extends BaseApiRequest
             'patient_id.exists' => 'Le patient selectionne est invalide.',
             'machine_id.required' => 'La machine est requise.',
             'machine_id.exists' => 'La machine selectionnee est invalide.',
-            'infirmier_id.exists' => "L'infirmier selectionne est invalide.",
+            'nurse_id.exists' => "L'infirmier selectionne est invalide ou archive.",
             'date_seance.required' => 'La date de seance est requise.',
             'heure_debut.required' => 'L heure de debut est requise.',
             'heure_debut.date_format' => 'L heure de debut doit etre au format HH:MM.',

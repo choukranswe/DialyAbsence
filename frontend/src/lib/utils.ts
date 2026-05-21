@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { AbsenceMotif, MachineStatut, SeanceStatut } from '../types';
+import type { AbsenceMotif, LeaveStatus, LeaveType, MachineStatut, NurseStatus, SeanceStatut } from '../types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,6 +44,34 @@ export const machineLabels: Record<MachineStatut, string> = {
   maintenance: 'Maintenance',
   hors_service: 'Hors service',
 };
+
+export const nurseStatusLabels: Record<NurseStatus, string> = {
+  active: 'Actif',
+  inactive: 'Inactif',
+};
+
+export const leaveTypeLabels: Record<LeaveType, string> = {
+  annual_leave: 'Conge annuel',
+  sick_leave: 'Conge maladie',
+  exceptional_leave: 'Conge exceptionnel',
+  vacation: 'Vacances',
+  rest_day: 'Jour de repos',
+};
+
+export const leaveStatusLabels: Record<LeaveStatus, string> = {
+  pending: 'En attente',
+  approved: 'Approuve',
+  refused: 'Refuse',
+  cancelled: 'Annule',
+};
+
+export const organismeOptions = [
+  { value: 'CNSS', label: 'CNSS' },
+  { value: 'CNOPS', label: 'CNOPS' },
+  { value: 'AMO', label: 'AMO' },
+  { value: 'Assurance privée', label: 'Assurance privée' },
+  { value: 'Sans couverture', label: 'Sans couverture' },
+];
 
 export function monthOptions() {
   return Array.from({ length: 12 }, (_, index) => ({

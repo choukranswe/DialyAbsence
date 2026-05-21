@@ -18,7 +18,7 @@ const schema = z.object({
   prenom: z.string().min(1, 'Prenom requis'),
   email: z.string().email('Email invalide'),
   password: z.string().optional(),
-  role: z.enum(['admin', 'medecin', 'infirmier']),
+  role: z.enum(['admin', 'doctor', 'receptionist']),
   telephone: z.string().optional().nullable(),
   actif: z.boolean(),
 });
@@ -30,7 +30,7 @@ const defaults: UserValues = {
   prenom: '',
   email: '',
   password: '',
-  role: 'infirmier',
+  role: 'receptionist',
   telephone: '',
   actif: true,
 };
@@ -104,8 +104,8 @@ export function Users() {
           <select className="input w-[170px]" value={role} onChange={(event) => { setRole(event.target.value as Role | ''); setPage(1); }}>
             <option value="">Tous roles</option>
             <option value="admin">Admin</option>
-            <option value="medecin">Medecin</option>
-            <option value="infirmier">Infirmier</option>
+            <option value="doctor">Doctor</option>
+            <option value="receptionist">Receptionist</option>
           </select>
         </div>
         <button type="button" className="btn-primary" onClick={() => { setSelected(null); setFormOpen(true); }}>
@@ -176,7 +176,7 @@ function UserDialog({ open, user, loading, onSubmit, onClose }: { open: boolean;
             <Field label="Prenom" error={errors.prenom?.message}><input className="input" {...register('prenom')} /></Field>
             <Field label="Email" error={errors.email?.message}><input type="email" className="input" {...register('email')} /></Field>
             <Field label={user ? 'Nouveau mot de passe' : 'Mot de passe'}><input type="password" className="input" {...register('password')} /></Field>
-            <Field label="Role"><select className="input" {...register('role')}><option value="admin">Admin</option><option value="medecin">Medecin</option><option value="infirmier">Infirmier</option></select></Field>
+            <Field label="Role"><select className="input" {...register('role')}><option value="admin">Admin</option><option value="doctor">Doctor</option><option value="receptionist">Receptionist</option></select></Field>
             <Field label="Telephone"><input className="input" {...register('telephone')} /></Field>
           </div>
           <label className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">

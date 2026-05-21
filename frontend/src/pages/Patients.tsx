@@ -3,6 +3,7 @@ import { Plus, Search, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { fetchMachines } from '../api/machines';
 import { archivePatient, createPatient, fetchPatients, importPatients, updatePatient } from '../api/patients';
 import { fetchUsers } from '../api/users';
 import { PatientForm } from '../components/patients/PatientForm';
@@ -30,12 +31,13 @@ export function Patients() {
     staleTime: 2 * 60 * 1000,
   });
 
-  const medecinsQuery = useQuery({
-    queryKey: ['users', 'medecins'],
-    queryFn: () => fetchUsers({ role: 'medecin', per_page: 100 }),
+  const doctorsQuery = useQuery({
+    queryKey: ['users', 'doctors'],
+    queryFn: () => fetchUsers({ role: 'doctor', per_page: 100 }),
     enabled: isAdmin,
     staleTime: 2 * 60 * 1000,
   });
+  const machinesQuery = useQuery({ queryKey: ['machines'], queryFn: fetchMachines, staleTime: 2 * 60 * 1000 });
 
   const saveMutation = useMutation({
     mutationFn: (payload: PatientPayload) => (selected ? updatePatient(selected.id, payload) : createPatient(payload)),
@@ -122,7 +124,8 @@ export function Patients() {
       <PatientForm
         open={formOpen}
         patient={selected}
-        medecins={medecinsQuery.data?.data ?? []}
+        doctors={doctorsQuery.data?.data ?? []}
+        machines={machinesQuery.data ?? []}
         loading={saveMutation.isPending}
         onSubmit={(payload) => saveMutation.mutate(payload)}
         onClose={() => { setFormOpen(false); setSelected(null); }}

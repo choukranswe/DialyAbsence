@@ -47,6 +47,27 @@ class PatientsImport implements ToCollection, WithHeadingRow
                 'poids' => ['nullable', 'numeric', 'between:1,999.99'],
                 'taille' => ['nullable', 'integer', 'between:30,250'],
                 'date_entree' => ['nullable', 'date'],
+                'emergency_contact' => ['nullable', 'string', 'max:120'],
+                'organisme' => ['nullable', Rule::in(['CNSS', 'CNOPS', 'AMO', 'Assurance privée', 'Sans couverture'])],
+                'insurance_number' => ['nullable', 'string', 'max:120'],
+                'dialysis_group' => ['nullable', Rule::in(['L/M/V', 'M/J/S'])],
+                'coverage_type' => ['nullable', 'string', 'max:120'],
+                'coverage_expiration' => ['nullable', 'date'],
+            ], [
+                'nom.required' => "Le nom est requis.",
+                'prenom.required' => "Le prenom est requis.",
+                'cin.required' => "Le CIN est requis.",
+                'cin.unique' => "Ce CIN existe deja.",
+                'cin.regex' => "Le format du CIN est invalide.",
+                'telephone.required' => "Le telephone est requis.",
+                'telephone.regex' => "Le format du telephone est invalide.",
+                'date_naissance.required' => "La date de naissance est requise.",
+                'date_naissance.date' => "La date de naissance est invalide.",
+                'date_naissance.before' => "La date de naissance doit etre anterieure a aujourd'hui.",
+                'statut.required' => "Le statut est requis.",
+                'statut.in' => "Le statut doit etre actif ou inactif.",
+                'organisme.in' => "L organisme est invalide.",
+                'dialysis_group.in' => "Le groupe de dialyse est invalide.",
             ]);
 
             if ($validator->fails()) {
@@ -87,9 +108,10 @@ class PatientsImport implements ToCollection, WithHeadingRow
             'prenom' => $this->text($this->value($row, ['prenom', 'first_name'])),
             'cin' => $this->cin($this->value($row, ['cin', 'c_i_n'])),
             'telephone' => $this->phone($this->value($row, ['telephone', 'tel', 'phone'])),
-            'date_naissance' => $this->date($this->value($row, ['date_naissance', 'date_de_naissance', 'naissance'])),
+            'date_naissance' => $this->date($this->value($row, ['date_naissance', 'date_de_naissance', 'naissance', 'datenaissance'])),
             'statut' => $this->status($this->value($row, ['statut', 'status'])),
             'sexe' => $this->sex($this->value($row, ['sexe', 'genre'])),
+            'emergency_contact' => $this->text($this->value($row, ['emergency_contact', 'contact_urgence', 'contacturgence'])),
             'adresse' => $this->text($this->value($row, ['adresse', 'address'])),
             'ville' => $this->text($this->value($row, ['ville', 'city'])),
             'groupe_sanguin' => $this->bloodGroup($this->value($row, ['groupe_sanguin', 'groupe', 'sang'])),
@@ -98,6 +120,11 @@ class PatientsImport implements ToCollection, WithHeadingRow
             'cause_insuffisance_renale' => $this->text($this->value($row, ['cause_insuffisance_renale', 'cause'])),
             'date_entree' => $this->date($this->value($row, ['date_entree', 'date_dentree', 'entree'])),
             'notes' => $this->text($this->value($row, ['notes', 'note'])),
+            'organisme' => $this->organisme($this->value($row, ['organisme', 'organism', 'assurance', 'mutuelle'])),
+            'insurance_number' => $this->text($this->value($row, ['insurance_number', 'numero_assurance', 'numeroassurance', 'matricule', 'numero_mutuelle'])),
+            'dialysis_group' => $this->dialysisGroup($this->value($row, ['dialysis_group', 'groupe_dialyse', 'groupedialyse'])),
+            'coverage_type' => $this->text($this->value($row, ['coverage_type', 'type_couverture', 'couverture'])),
+            'coverage_expiration' => $this->date($this->value($row, ['coverage_expiration', 'expiration_couverture', 'date_expiration'])),
         ];
     }
 
@@ -110,6 +137,7 @@ class PatientsImport implements ToCollection, WithHeadingRow
             'date_naissance' => $data['date_naissance'],
             'sexe' => $data['sexe'] ?: 'M',
             'telephone' => $data['telephone'],
+            'emergency_contact' => $data['emergency_contact'],
             'adresse' => $data['adresse'] ?: 'Non renseignee',
             'ville' => $data['ville'] ?: 'Casablanca',
             'groupe_sanguin' => $data['groupe_sanguin'] ?: 'O+',
@@ -120,6 +148,12 @@ class PatientsImport implements ToCollection, WithHeadingRow
             'date_entree' => $data['date_entree'] ?: Carbon::today()->toDateString(),
             'actif' => $data['statut'] === 'actif',
             'notes' => $data['notes'] ?: 'Import Excel - informations a completer.',
+            'organisme' => $data['organisme'],
+            'insurance_number' => $data['insurance_number'],
+            'dialysis_group' => $data['dialysis_group'],
+            'assigned_machine_id' => null,
+            'coverage_type' => $data['coverage_type'],
+            'coverage_expiration' => $data['coverage_expiration'],
         ];
     }
 
@@ -239,6 +273,36 @@ class PatientsImport implements ToCollection, WithHeadingRow
         $value = strtoupper(str_replace(' ', '', $this->text($value) ?? ''));
 
         return $value ?: null;
+    }
+
+    private function organisme(mixed $value): ?string
+    {
+        $text = $this->text($value);
+
+        if (! $text) {
+            return null;
+        }
+
+        return match (strtolower(Str::ascii($text))) {
+            'cnss' => 'CNSS',
+            'cnops' => 'CNOPS',
+            'ramed' => 'RAMED',
+            'amo' => 'AMO',
+            'assurance privee', 'assurance prive', 'private insurance' => 'Assurance privée',
+            'sans couverture', 'aucune', 'none' => 'Sans couverture',
+            default => $text,
+        };
+    }
+
+    private function dialysisGroup(mixed $value): ?string
+    {
+        $value = strtoupper(str_replace(' ', '', $this->text($value) ?? ''));
+
+        return match ($value) {
+            'L/M/V', 'LMV' => 'L/M/V',
+            'M/J/S', 'MJS' => 'M/J/S',
+            default => $value ?: null,
+        };
     }
 
     private function number(mixed $value): mixed

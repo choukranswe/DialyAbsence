@@ -6,7 +6,9 @@ import {
   FileText,
   Menu,
   MonitorCog,
+  Umbrella,
   Users,
+  UserRoundCog,
   UserRound,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -17,6 +19,8 @@ const links = [
   { to: '/patients', label: 'Patients', icon: UserRound },
   { to: '/seances', label: 'Seances', icon: CalendarDays },
   { to: '/absences', label: 'Absences', icon: ClipboardX },
+  { to: '/nurses', label: 'Personnel infirmier', icon: UserRoundCog },
+  { to: '/staff-leaves', label: 'Conges du personnel', icon: Umbrella },
   { to: '/machines', label: 'Machines', icon: MonitorCog },
   { to: '/reports', label: 'Rapports', icon: FileText },
 ];

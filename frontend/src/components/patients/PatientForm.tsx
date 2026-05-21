@@ -4,7 +4,8 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import type { Patient, PatientPayload, User } from '../../types';
+import { organismeOptions } from '../../lib/utils';
+import type { Machine, Patient, PatientPayload, User } from '../../types';
 
 const schema = z.object({
   nom: z.string().min(1, 'Le nom est requis'),
@@ -13,6 +14,7 @@ const schema = z.object({
   date_naissance: z.string().min(1, 'La date de naissance est requise'),
   sexe: z.enum(['M', 'F']),
   telephone: z.string().regex(/^(05|06|07)[0-9]{8}$/, 'Telephone marocain invalide'),
+  emergency_contact: z.string().optional().nullable(),
   adresse: z.string().min(1, 'Adresse requise'),
   ville: z.string().min(1, 'Ville requise'),
   groupe_sanguin: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
@@ -23,6 +25,12 @@ const schema = z.object({
   date_entree: z.string().min(1, "Date d'entree requise"),
   actif: z.boolean(),
   notes: z.string().optional().nullable(),
+  organisme: z.string().optional().nullable(),
+  insurance_number: z.string().optional().nullable(),
+  dialysis_group: z.string().optional().nullable(),
+  assigned_machine_id: z.coerce.number().optional().nullable(),
+  coverage_type: z.string().optional().nullable(),
+  coverage_expiration: z.string().optional().nullable(),
 });
 
 type PatientFormInput = z.input<typeof schema>;
@@ -31,7 +39,8 @@ type PatientFormValues = z.output<typeof schema>;
 interface PatientFormProps {
   open: boolean;
   patient?: Patient | null;
-  medecins?: User[];
+  doctors?: User[];
+  machines?: Machine[];
   loading?: boolean;
   onSubmit: (payload: PatientPayload) => void;
   onClose: () => void;
@@ -44,6 +53,7 @@ const defaults: PatientFormValues = {
   date_naissance: '',
   sexe: 'M',
   telephone: '',
+  emergency_contact: '',
   adresse: '',
   ville: 'Casablanca',
   groupe_sanguin: 'O+',
@@ -54,9 +64,15 @@ const defaults: PatientFormValues = {
   date_entree: new Date().toISOString().slice(0, 10),
   actif: true,
   notes: '',
+  organisme: '',
+  insurance_number: '',
+  dialysis_group: null,
+  assigned_machine_id: null,
+  coverage_type: '',
+  coverage_expiration: '',
 };
 
-export function PatientForm({ open, patient, medecins = [], loading, onSubmit, onClose }: PatientFormProps) {
+export function PatientForm({ open, patient, doctors = [], machines = [], loading, onSubmit, onClose }: PatientFormProps) {
   const {
     register,
     handleSubmit,
@@ -73,6 +89,7 @@ export function PatientForm({ open, patient, medecins = [], loading, onSubmit, o
         date_naissance: patient.date_naissance,
         sexe: patient.sexe,
         telephone: patient.telephone,
+        emergency_contact: patient.emergency_contact ?? '',
         adresse: patient.adresse,
         ville: patient.ville,
         groupe_sanguin: patient.groupe_sanguin,
@@ -83,6 +100,12 @@ export function PatientForm({ open, patient, medecins = [], loading, onSubmit, o
         date_entree: patient.date_entree,
         actif: patient.actif,
         notes: patient.notes ?? '',
+        organisme: patient.organisme ?? '',
+        insurance_number: patient.insurance_number ?? '',
+        dialysis_group: patient.dialysis_group ?? null,
+        assigned_machine_id: patient.assigned_machine_id ?? null,
+        coverage_type: patient.coverage_type ?? '',
+        coverage_expiration: patient.coverage_expiration ?? '',
       });
     } else {
       reset(defaults);
@@ -101,12 +124,24 @@ export function PatientForm({ open, patient, medecins = [], loading, onSubmit, o
           </button>
         </div>
 
-        <form onSubmit={handleSubmit((values) => onSubmit({ ...values, nephrologue_id: values.nephrologue_id || null, notes: values.notes || null }))} className="space-y-5 p-6">
+        <form onSubmit={handleSubmit((values) => onSubmit({
+          ...values,
+          nephrologue_id: values.nephrologue_id || null,
+          emergency_contact: values.emergency_contact || null,
+          notes: values.notes || null,
+          organisme: values.organisme || null,
+          insurance_number: values.insurance_number || null,
+          dialysis_group: values.dialysis_group || null,
+          assigned_machine_id: values.assigned_machine_id || null,
+          coverage_type: values.coverage_type || null,
+          coverage_expiration: values.coverage_expiration || null,
+        }))} className="space-y-5 p-6">
           <div className="grid gap-4 md:grid-cols-4">
             <Field label="Nom" error={errors.nom?.message}><input className="input" {...register('nom')} /></Field>
             <Field label="Prenom" error={errors.prenom?.message}><input className="input" {...register('prenom')} /></Field>
             <Field label="CIN" error={errors.cin?.message}><input className="input uppercase" {...register('cin')} /></Field>
             <Field label="Telephone" error={errors.telephone?.message}><input className="input" {...register('telephone')} /></Field>
+            <Field label="Contact urgence"><input className="input" {...register('emergency_contact')} /></Field>
             <Field label="Date naissance" error={errors.date_naissance?.message}><input type="date" className="input" {...register('date_naissance')} /></Field>
             <Field label="Sexe"><select className="input" {...register('sexe')}><option value="M">M</option><option value="F">F</option></select></Field>
             <Field label="Groupe"><select className="input" {...register('groupe_sanguin')}>{['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map((value) => <option key={value}>{value}</option>)}</select></Field>
@@ -117,9 +152,31 @@ export function PatientForm({ open, patient, medecins = [], loading, onSubmit, o
             <Field label="Nephrologue">
               <select className="input" {...register('nephrologue_id')}>
                 <option value="">Non assigne</option>
-                {medecins.map((medecin) => <option key={medecin.id} value={medecin.id}>{medecin.nom_complet}</option>)}
+                {doctors.map((doctor) => <option key={doctor.id} value={doctor.id}>{doctor.nom_complet}</option>)}
               </select>
             </Field>
+            <Field label="Organisme">
+              <select className="input" {...register('organisme')}>
+                <option value="">Non renseigne</option>
+                {organismeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </Field>
+            <Field label="Numero assurance" error={errors.insurance_number?.message}><input className="input" {...register('insurance_number')} /></Field>
+            <Field label="Groupe dialyse">
+              <select className="input" {...register('dialysis_group')}>
+                <option value="">Non assigne</option>
+                <option value="L/M/V">L/M/V</option>
+                <option value="M/J/S">M/J/S</option>
+              </select>
+            </Field>
+            <Field label="Machine assignee">
+              <select className="input" {...register('assigned_machine_id')}>
+                <option value="">Non assignee</option>
+                {machines.map((machine) => <option key={machine.id} value={machine.id}>{machine.numero} - {machine.statut}</option>)}
+              </select>
+            </Field>
+            <Field label="Type couverture" error={errors.coverage_type?.message}><input className="input" {...register('coverage_type')} /></Field>
+            <Field label="Expiration couverture" error={errors.coverage_expiration?.message}><input type="date" className="input" {...register('coverage_expiration')} /></Field>
           </div>
 
           <Field label="Adresse" error={errors.adresse?.message}><input className="input" {...register('adresse')} /></Field>

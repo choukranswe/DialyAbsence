@@ -9,10 +9,12 @@ import { Absences } from './pages/Absences';
 import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
 import { Machines } from './pages/Machines';
+import { Nurses } from './pages/Nurses';
 import { PatientDetail } from './pages/PatientDetail';
 import { Patients } from './pages/Patients';
 import { Reports } from './pages/Reports';
 import { Seances } from './pages/Seances';
+import { StaffLeaves } from './pages/StaffLeaves';
 import { Users } from './pages/Users';
 
 const queryClient = new QueryClient({
@@ -49,6 +51,8 @@ function AppRoutes() {
           <Route path="/patients/:id" element={<Page><PatientDetail /></Page>} />
           <Route path="/seances" element={<Page><Seances /></Page>} />
           <Route path="/absences" element={<Page><Absences /></Page>} />
+          <Route path="/nurses" element={<Page><Nurses /></Page>} />
+          <Route path="/staff-leaves" element={<Page><StaffLeaves /></Page>} />
           <Route path="/machines" element={<Page><Machines /></Page>} />
           <Route path="/reports" element={<Page><Reports /></Page>} />
           <Route path="/users" element={<AdminRoute><Page><Users /></Page></AdminRoute>} />

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, CalendarDays, MonitorCheck, UserRoundCheck } from 'lucide-react';
+import { AlertTriangle, CalendarDays, ClipboardList, HeartPulse, Umbrella, UserRoundCheck } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { fetchAlerts, fetchDashboardStats, fetchWeeklyAttendance } from '../api/dashboard';
@@ -22,11 +22,13 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatCard icon={UserRoundCheck} label="Patients actifs" value={stats?.patients_actifs} loading={statsQuery.isLoading} tone="blue" />
-        <StatCard icon={CalendarDays} label="Seances aujourd'hui" value={stats?.seances_aujourdhui} loading={statsQuery.isLoading} tone="amber" />
-        <StatCard icon={AlertTriangle} label="Absences ce mois" value={stats?.absences_ce_mois} loading={statsQuery.isLoading} tone="red" />
-        <StatCard icon={MonitorCheck} label="Machines disponibles" value={stats?.machines_disponibles} loading={statsQuery.isLoading} tone="green" />
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+        <StatCard icon={UserRoundCheck} label="Patients actifs" value={stats?.active_patients ?? stats?.patients_actifs} loading={statsQuery.isLoading} tone="blue" />
+        <StatCard icon={AlertTriangle} label="Absences patients aujourd'hui" value={stats?.patient_absences_today} loading={statsQuery.isLoading} tone="red" />
+        <StatCard icon={HeartPulse} label="Infirmiers actifs" value={stats?.active_nurses} loading={statsQuery.isLoading} tone="green" />
+        <StatCard icon={Umbrella} label="Infirmiers en conge" value={stats?.nurses_on_leave_today} loading={statsQuery.isLoading} tone="amber" />
+        <StatCard icon={ClipboardList} label="Conges en attente" value={stats?.pending_leave_requests} loading={statsQuery.isLoading} tone="slate" />
+        <StatCard icon={CalendarDays} label="Seances aujourd'hui" value={stats?.dialysis_sessions_today ?? stats?.seances_aujourdhui} loading={statsQuery.isLoading} tone="blue" />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.5fr_0.8fr]">
@@ -117,12 +119,13 @@ export function Dashboard() {
   );
 }
 
-function StatCard({ icon: Icon, label, value, loading, tone }: { icon: ElementType; label: string; value?: number; loading?: boolean; tone: 'blue' | 'amber' | 'red' | 'green' }) {
+function StatCard({ icon: Icon, label, value, loading, tone }: { icon: ElementType; label: string; value?: number; loading?: boolean; tone: 'blue' | 'amber' | 'red' | 'green' | 'slate' }) {
   const toneClass = {
     blue: 'bg-blue-50 text-[#2563EB]',
     amber: 'bg-amber-50 text-[#D97706]',
     red: 'bg-red-50 text-[#DC2626]',
     green: 'bg-green-50 text-[#16A34A]',
+    slate: 'bg-slate-100 text-slate-700',
   }[tone];
 
   return (

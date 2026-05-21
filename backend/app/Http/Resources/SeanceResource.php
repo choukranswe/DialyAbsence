@@ -25,10 +25,12 @@ class SeanceResource extends JsonResource
                 'numero' => $this->machine?->numero,
                 'statut' => $this->machine?->statut,
             ],
-            'infirmier_id' => $this->infirmier_id,
-            'infirmier' => $this->infirmier ? [
-                'id' => $this->infirmier->id,
-                'nom_complet' => $this->infirmier->nom_complet,
+            'nurse_id' => $this->nurse_id,
+            'nurse' => $this->nurse ? [
+                'id' => $this->nurse->id,
+                'full_name' => $this->nurse->full_name,
+                'phone' => $this->nurse->phone,
+                'shift' => $this->nurse->shift,
             ] : null,
             'date_seance' => $this->date_seance?->toDateString(),
             'heure_debut' => substr((string) $this->heure_debut, 0, 5),

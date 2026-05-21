@@ -22,7 +22,7 @@
 </head>
 <body>
     <h1>Rapport mensuel de presence</h1>
-    <div class="muted">{{ config('app.name') }} - {{ $period }}</div>
+    <div class="muted">{{ config('app.name') }} - {{ $period }}@if ($organisme) - Organisme: {{ $organisme }}@endif</div>
 
     <table class="summary">
         <tr>
@@ -41,6 +41,7 @@
                 <th>Heure</th>
                 <th>Patient</th>
                 <th>CIN</th>
+                <th>Organisme</th>
                 <th>Machine</th>
                 <th>Infirmier</th>
                 <th>Statut</th>
@@ -53,12 +54,13 @@
                     <td>{{ substr($seance->heure_debut, 0, 5) }} - {{ substr($seance->heure_fin, 0, 5) }}</td>
                     <td>{{ $seance->patient?->nom_complet }}</td>
                     <td>{{ $seance->patient?->cin }}</td>
+                    <td>{{ $seance->patient?->organisme ?? '-' }}</td>
                     <td>{{ $seance->machine?->numero }}</td>
-                    <td>{{ $seance->infirmier?->nom_complet ?? '-' }}</td>
+                    <td>{{ $seance->nurse?->full_name ?? '-' }}</td>
                     <td class="status {{ $seance->statut }}">{{ $seance->statut }}</td>
                 </tr>
             @empty
-                <tr><td colspan="7">Aucune seance pour cette periode.</td></tr>
+                <tr><td colspan="8">Aucune seance pour cette periode.</td></tr>
             @endforelse
         </tbody>
     </table>

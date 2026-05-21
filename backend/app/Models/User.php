@@ -14,7 +14,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    public const ROLES = ['admin', 'medecin', 'infirmier'];
+    public const ROLES = ['admin', 'doctor', 'receptionist'];
 
     protected $fillable = [
         'nom',
@@ -44,14 +44,14 @@ class User extends Authenticatable
         return $this->hasMany(Patient::class, 'nephrologue_id');
     }
 
-    public function seances(): HasMany
-    {
-        return $this->hasMany(Seance::class, 'infirmier_id');
-    }
-
     public function declaredAbsences(): HasMany
     {
         return $this->hasMany(Absence::class, 'declared_by');
+    }
+
+    public function approvedLeaves(): HasMany
+    {
+        return $this->hasMany(NurseLeave::class, 'approved_by');
     }
 
     public function auditLogs(): HasMany

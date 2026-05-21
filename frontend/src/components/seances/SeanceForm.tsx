@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { minutesBetween, todayIso } from '../../lib/utils';
-import type { Machine, Patient, Seance, SeancePayload, User } from '../../types';
+import type { Machine, Nurse, Patient, Seance, SeancePayload } from '../../types';
 
 const schema = z.object({
   patient_id: z.coerce.number().min(1, 'Patient requis'),
   machine_id: z.coerce.number().min(1, 'Machine requise'),
-  infirmier_id: z.coerce.number().optional().nullable(),
+  nurse_id: z.coerce.number().optional().nullable(),
   date_seance: z.string().min(1, 'Date requise'),
   heure_debut: z.string().min(1, 'Heure debut requise'),
   heure_fin: z.string().min(1, 'Heure fin requise'),
@@ -32,7 +32,7 @@ interface SeanceFormProps {
   seance?: Seance | null;
   patients: Patient[];
   machines: Machine[];
-  infirmiers: User[];
+  nurses: Nurse[];
   initialSlot?: { date: string; start: string; end: string } | null;
   loading?: boolean;
   onSubmit: (payload: SeancePayload) => void;
@@ -43,7 +43,7 @@ interface SeanceFormProps {
 const defaults: SeanceFormValues = {
   patient_id: 0,
   machine_id: 0,
-  infirmier_id: null,
+  nurse_id: null,
   date_seance: todayIso(),
   heure_debut: '07:00',
   heure_fin: '11:00',
@@ -57,7 +57,7 @@ const defaults: SeanceFormValues = {
   observations: '',
 };
 
-export function SeanceForm({ open, seance, patients, machines, infirmiers, initialSlot, loading, onSubmit, onDelete, onClose }: SeanceFormProps) {
+export function SeanceForm({ open, seance, patients, machines, nurses, initialSlot, loading, onSubmit, onDelete, onClose }: SeanceFormProps) {
   const {
     register,
     handleSubmit,
@@ -81,7 +81,7 @@ export function SeanceForm({ open, seance, patients, machines, infirmiers, initi
       reset({
         patient_id: seance.patient_id,
         machine_id: seance.machine_id,
-        infirmier_id: seance.infirmier_id ?? null,
+        nurse_id: seance.nurse_id ?? null,
         date_seance: seance.date_seance,
         heure_debut: seance.heure_debut,
         heure_fin: seance.heure_fin,
@@ -128,9 +128,9 @@ export function SeanceForm({ open, seance, patients, machines, infirmiers, initi
               </select>
             </Field>
             <Field label="Infirmier">
-              <select className="input" {...register('infirmier_id')}>
+              <select className="input" {...register('nurse_id')}>
                 <option value="">Non assigne</option>
-                {infirmiers.map((infirmier) => <option key={infirmier.id} value={infirmier.id}>{infirmier.nom_complet}</option>)}
+                {nurses.map((nurse) => <option key={nurse.id} value={nurse.id}>{nurse.full_name}</option>)}
               </select>
             </Field>
             <Field label="Date" error={errors.date_seance?.message}><input type="date" className="input" {...register('date_seance')} /></Field>
@@ -174,7 +174,7 @@ export function SeanceForm({ open, seance, patients, machines, infirmiers, initi
 function normalize(values: SeanceFormValues): SeancePayload {
   return {
     ...values,
-    infirmier_id: values.infirmier_id || null,
+    nurse_id: values.nurse_id || null,
     tension_avant: values.tension_avant || null,
     tension_apres: values.tension_apres || null,
     poids_avant: values.poids_avant || null,

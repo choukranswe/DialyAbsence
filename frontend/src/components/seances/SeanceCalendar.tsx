@@ -67,7 +67,7 @@ export function SeanceCalendar({ startDate, seances, onEdit, onCreate }: SeanceC
                     <div className="truncate text-sm font-bold text-[#1E3A5F]">{seance.patient?.nom_complet}</div>
                     <div className="mt-1 flex items-center gap-1 text-xs text-slate-600">
                       <Monitor className="h-3.5 w-3.5" />
-                      {seance.machine?.numero} - {seance.infirmier?.nom_complet ?? 'Non assigne'}
+                      {seance.machine?.numero} - {seance.nurse?.full_name ?? 'Non assigne'}
                     </div>
                     <div className="mt-2 flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold text-slate-600">{seance.heure_debut}</span>

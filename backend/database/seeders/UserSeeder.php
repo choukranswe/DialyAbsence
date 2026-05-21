@@ -12,11 +12,8 @@ class UserSeeder extends Seeder
     {
         $users = [
             ['nom' => 'Admin', 'prenom' => 'Centre', 'email' => 'admin@dialyse.ma', 'role' => 'admin', 'telephone' => '0611111111'],
-            ['nom' => 'Bennani', 'prenom' => 'Nadia', 'email' => 'medecin@dialyse.ma', 'role' => 'medecin', 'telephone' => '0622222222'],
-            ['nom' => 'El Idrissi', 'prenom' => 'Youssef', 'email' => 'medecin2@dialyse.ma', 'role' => 'medecin', 'telephone' => '0622222223'],
-            ['nom' => 'Alaoui', 'prenom' => 'Sara', 'email' => 'infirmier@dialyse.ma', 'role' => 'infirmier', 'telephone' => '0633333333'],
-            ['nom' => 'Fassi', 'prenom' => 'Hamza', 'email' => 'infirmier2@dialyse.ma', 'role' => 'infirmier', 'telephone' => '0633333334'],
-            ['nom' => 'Mansouri', 'prenom' => 'Imane', 'email' => 'infirmier3@dialyse.ma', 'role' => 'infirmier', 'telephone' => '0633333335'],
+            ['nom' => 'Mjabber', 'prenom' => 'Mouna', 'email' => 'doctor@dialyse.ma', 'role' => 'doctor', 'telephone' => '0622222222'],
+            ['nom' => 'Accueil', 'prenom' => 'Reception', 'email' => 'reception@dialyse.ma', 'role' => 'receptionist', 'telephone' => '0633333333'],
         ];
 
         foreach ($users as $user) {
@@ -25,5 +22,17 @@ class UserSeeder extends Seeder
                 [...$user, 'password' => Hash::make('password'), 'actif' => true]
             );
         }
+
+        User::where('role', 'doctor')
+            ->where('email', '!=', 'doctor@dialyse.ma')
+            ->update(['actif' => false]);
+
+        User::whereIn('email', [
+            'medecin@dialyse.ma',
+            'medecin2@dialyse.ma',
+            'infirmier@dialyse.ma',
+            'infirmier2@dialyse.ma',
+            'infirmier3@dialyse.ma',
+        ])->update(['actif' => false]);
     }
 }

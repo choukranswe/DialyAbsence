@@ -1,4 +1,4 @@
-import { Calendar, Droplet, MapPin, Phone, UserRound } from 'lucide-react';
+import { Calendar, CalendarClock, CreditCard, Droplet, HeartPulse, MapPin, Monitor, Phone, ShieldCheck, UserRound } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 import type { Patient } from '../../types';
 import { StatusBadge } from '../shared/StatusBadge';
@@ -7,9 +7,15 @@ export function PatientCard({ patient }: { patient: Patient }) {
   const items = [
     { icon: UserRound, label: 'CIN', value: patient.cin },
     { icon: Phone, label: 'Telephone', value: patient.telephone },
+    { icon: Phone, label: 'Urgence', value: patient.emergency_contact ?? '-' },
     { icon: MapPin, label: 'Ville', value: patient.ville },
     { icon: Calendar, label: 'Entree', value: formatDate(patient.date_entree) },
-    { icon: Droplet, label: 'Groupe', value: patient.groupe_sanguin },
+    { icon: HeartPulse, label: 'Dialyse', value: patient.dialysis_group ?? '-' },
+    { icon: Monitor, label: 'Machine', value: patient.assigned_machine?.numero ?? '-' },
+    { icon: Droplet, label: 'Sang', value: patient.groupe_sanguin },
+    { icon: ShieldCheck, label: 'Organisme', value: patient.organisme ?? '-' },
+    { icon: CreditCard, label: 'Assurance', value: patient.insurance_number ?? '-' },
+    { icon: CalendarClock, label: 'Expiration', value: formatDate(patient.coverage_expiration) },
   ];
 
   return (
@@ -23,7 +29,7 @@ export function PatientCard({ patient }: { patient: Patient }) {
         </div>
         <StatusBadge type="patient" value={patient.actif} />
       </div>
-      <div className="mt-5 grid gap-3 md:grid-cols-5">
+      <div className="mt-5 grid gap-3 md:grid-cols-4 lg:grid-cols-5">
         {items.map(({ icon: Icon, label, value }) => (
           <div key={label} className="rounded-md border border-slate-100 bg-slate-50 p-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
@@ -34,7 +40,7 @@ export function PatientCard({ patient }: { patient: Patient }) {
           </div>
         ))}
       </div>
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <div className="mt-4 grid gap-4 md:grid-cols-3">
         <div>
           <div className="text-xs font-bold uppercase text-slate-500">Cause insuffisance renale</div>
           <p className="mt-1 text-sm text-slate-700">{patient.cause_insuffisance_renale}</p>
@@ -42,6 +48,10 @@ export function PatientCard({ patient }: { patient: Patient }) {
         <div>
           <div className="text-xs font-bold uppercase text-slate-500">Nephrologue</div>
           <p className="mt-1 text-sm text-slate-700">{patient.nephrologue?.nom_complet ?? '-'}</p>
+        </div>
+        <div>
+          <div className="text-xs font-bold uppercase text-slate-500">Type couverture</div>
+          <p className="mt-1 text-sm text-slate-700">{patient.coverage_type ?? '-'}</p>
         </div>
       </div>
     </section>

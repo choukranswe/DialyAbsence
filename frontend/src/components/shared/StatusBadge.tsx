@@ -1,5 +1,5 @@
-import { cn, machineLabels, seanceLabels } from '../../lib/utils';
-import type { MachineStatut, SeanceStatut } from '../../types';
+import { cn, leaveStatusLabels, machineLabels, nurseStatusLabels, seanceLabels } from '../../lib/utils';
+import type { LeaveStatus, MachineStatut, NurseStatus, SeanceStatut } from '../../types';
 
 type BadgeTone = 'green' | 'amber' | 'red' | 'blue' | 'slate';
 
@@ -12,7 +12,7 @@ const tones: Record<BadgeTone, string> = {
 };
 
 interface StatusBadgeProps {
-  type: 'seance' | 'machine' | 'patient' | 'absence';
+  type: 'seance' | 'machine' | 'patient' | 'absence' | 'nurse' | 'leave';
   value: string | boolean;
 }
 
@@ -41,6 +41,22 @@ function getConfig(type: StatusBadgeProps['type'], value: string | boolean): { l
     return {
       label: seanceLabels[statut] ?? String(value),
       tone: statut === 'effectuee' ? 'green' : statut === 'annulee' ? 'red' : 'amber',
+    };
+  }
+
+  if (type === 'nurse') {
+    const statut = value as NurseStatus;
+    return {
+      label: nurseStatusLabels[statut] ?? String(value),
+      tone: statut === 'active' ? 'green' : 'red',
+    };
+  }
+
+  if (type === 'leave') {
+    const statut = value as LeaveStatus;
+    return {
+      label: leaveStatusLabels[statut] ?? String(value),
+      tone: statut === 'approved' ? 'green' : statut === 'refused' || statut === 'cancelled' ? 'red' : 'amber',
     };
   }
 
