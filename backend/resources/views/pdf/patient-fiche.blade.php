@@ -5,21 +5,33 @@
     <title>Fiche patient</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; color: #0f172a; font-size: 11px; }
-        h1 { color: #1e3a5f; margin: 0 0 4px; font-size: 22px; }
-        h2 { color: #1e3a5f; margin: 18px 0 8px; font-size: 14px; }
+        h1 { color: #072c73; margin: 0 0 4px; font-size: 22px; }
+        h2 { color: #072c73; margin: 18px 0 8px; font-size: 14px; }
         .muted { color: #64748b; }
+        .report-header { border-bottom: 2px solid #0a4faf; margin-bottom: 14px; padding-bottom: 10px; }
+        .logo { height: 46px; margin-bottom: 8px; }
+        .center-name { color: #072c73; font-weight: bold; }
         .grid { width: 100%; border-collapse: collapse; margin-top: 12px; }
         .grid td { border: 1px solid #dbe3ef; padding: 8px; width: 25%; vertical-align: top; }
         .label { color: #475569; font-size: 10px; text-transform: uppercase; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #1e3a5f; color: #fff; text-align: left; padding: 7px; }
+        th { background: #0a4faf; color: #fff; text-align: left; padding: 7px; }
         td { border: 1px solid #dbe3ef; padding: 6px; vertical-align: top; }
         .footer { margin-top: 18px; color: #64748b; font-size: 10px; }
     </style>
 </head>
 <body>
-    <h1>Fiche complete patient</h1>
-    <div class="muted">{{ config('app.name') }} - Generee le {{ $generatedAt }}</div>
+    @php($center = config('center'))
+    @php($logo = is_file($center['logo_path']) ? 'data:image/png;base64,'.base64_encode(file_get_contents($center['logo_path'])) : null)
+
+    <div class="report-header">
+        @if ($logo)
+            <img class="logo" src="{{ $logo }}" alt="{{ $center['name'] }}">
+        @endif
+        <h1>Fiche complete patient</h1>
+        <div class="muted"><span class="center-name">{{ $center['name'] }}</span> - {{ $center['city'] }} - Médecin responsable: {{ $center['responsible_doctor'] }}</div>
+        <div class="muted">Generee le {{ $generatedAt }}</div>
+    </div>
 
     <table class="grid">
         <tr>
@@ -107,6 +119,6 @@
         <p>{{ $patient->notes }}</p>
     @endif
 
-    <div class="footer">Seances totales: {{ $patient->seances_count }} - Absences totales: {{ $patient->absences_count }}</div>
+    <div class="footer">{{ $center['name'] }} - {{ $center['city'] }} - Seances totales: {{ $patient->seances_count }} - Absences totales: {{ $patient->absences_count }}</div>
 </body>
 </html>

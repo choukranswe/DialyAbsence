@@ -22,7 +22,7 @@ export function ConfirmDialog({ open, title, message, confirmLabel = 'Confirmer'
               <AlertTriangle className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#1E3A5F]">{title}</h2>
+              <h2 className="text-base font-bold text-[#072C73]">{title}</h2>
               <p className="mt-1 text-sm text-slate-500">{message}</p>
             </div>
           </div>
@@ -37,7 +37,7 @@ export function ConfirmDialog({ open, title, message, confirmLabel = 'Confirmer'
           <button
             type="button"
             onClick={onConfirm}
-            className={danger ? 'rounded-md bg-[#DC2626] px-4 py-2 text-sm font-bold text-white hover:bg-red-700' : 'rounded-md bg-[#2563EB] px-4 py-2 text-sm font-bold text-white hover:bg-blue-700'}
+            className={danger ? 'rounded-md bg-[#DC2626] px-4 py-2 text-sm font-bold text-white hover:bg-red-700' : 'rounded-md bg-[#0A4FAF] px-4 py-2 text-sm font-bold text-white hover:bg-[#072C73]'}
           >
             {confirmLabel}
           </button>

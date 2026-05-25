@@ -26,7 +26,7 @@ export function PatientTable({ patients, loading, page, lastPage, total, onPageC
       sortValue: (patient) => patient.nom_complet,
       render: (patient) => (
         <div>
-          <div className="font-bold text-[#1E3A5F]">{patient.nom_complet}</div>
+          <div className="font-bold text-[#072C73]">{patient.nom_complet}</div>
           <div className="text-xs text-slate-500">{patient.cin}</div>
         </div>
       ),
@@ -55,7 +55,7 @@ export function PatientTable({ patients, loading, page, lastPage, total, onPageC
       className: 'w-[150px]',
       render: (patient) => (
         <div className="flex items-center gap-1">
-          <button type="button" onClick={() => onView(patient)} className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-blue-50 hover:text-[#2563EB]" title="Voir">
+          <button type="button" onClick={() => onView(patient)} className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-blue-50 hover:text-[#0A4FAF]" title="Voir">
             <Eye className="h-4 w-4" />
           </button>
           <button type="button" onClick={() => onEdit(patient)} className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-amber-50 hover:text-[#D97706]" title="Modifier">

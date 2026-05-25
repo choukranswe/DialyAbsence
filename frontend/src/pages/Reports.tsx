@@ -118,10 +118,10 @@ export function Reports() {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {reports.map(({ title, description, icon: Icon, action }) => (
           <section key={title} className="surface p-5">
-            <div className="grid h-12 w-12 place-items-center rounded-lg bg-blue-50 text-[#2563EB]">
+            <div className="grid h-12 w-12 place-items-center rounded-lg bg-blue-50 text-[#2F7ED8]">
               <Icon className="h-6 w-6" />
             </div>
-            <h2 className="mt-4 text-lg font-bold text-[#1E3A5F]">{title}</h2>
+            <h2 className="mt-4 text-lg font-bold text-[#072C73]">{title}</h2>
             <p className="mt-2 min-h-12 text-sm text-slate-500">{description}</p>
             <button type="button" className="btn-primary mt-5 w-full" onClick={() => action().catch((error) => toast.error(error.message))}>
               <Download className="h-4 w-4" />

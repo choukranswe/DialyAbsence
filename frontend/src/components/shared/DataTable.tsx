@@ -116,7 +116,7 @@ export function DataTable<T>({ data, columns, getRowKey, loading, empty, page, l
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="font-bold text-[#1E3A5F]">
+            <span className="font-bold text-[#072C73]">
               {page} / {lastPage}
             </span>
             <button

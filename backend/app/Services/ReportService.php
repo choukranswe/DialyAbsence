@@ -216,7 +216,7 @@ class ReportService
                 'date_naissance' => $patient->date_naissance?->format('d/m/Y'),
                 'periode' => $start->format('m/Y'),
                 'nombre_seances' => $patient->seances_effectuees_count,
-                'centre' => config('app.name'),
+                'centre' => config('center.name'),
             ]);
 
         return Excel::download($this->export($rows, [

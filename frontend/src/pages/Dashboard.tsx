@@ -6,6 +6,7 @@ import { fetchAlerts, fetchDashboardStats, fetchWeeklyAttendance } from '../api/
 import { formatDate, formatNumber } from '../lib/utils';
 import { LoadingSkeleton } from '../components/shared/LoadingSkeleton';
 import { StatusBadge } from '../components/shared/StatusBadge';
+import { centerBranding } from '../lib/branding';
 
 const colors = ['#16A34A', '#DC2626'];
 
@@ -22,6 +23,16 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <section className="surface flex flex-wrap items-center justify-between gap-4 p-5">
+        <div className="min-w-0">
+          <h2 className="truncate text-lg font-bold text-[#072C73]">{centerBranding.name}</h2>
+          <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+            <span>{centerBranding.responsibleDoctor}</span>
+            <span>{centerBranding.city}</span>
+          </div>
+        </div>
+      </section>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <StatCard icon={UserRoundCheck} label="Patients actifs" value={stats?.active_patients ?? stats?.patients_actifs} loading={statsQuery.isLoading} tone="blue" />
         <StatCard icon={AlertTriangle} label="Absences patients aujourd'hui" value={stats?.patient_absences_today} loading={statsQuery.isLoading} tone="red" />
@@ -34,7 +45,7 @@ export function Dashboard() {
       <div className="grid gap-6 xl:grid-cols-[1.5fr_0.8fr]">
         <section className="surface p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-bold text-[#1E3A5F]">Frequentation cette semaine</h2>
+            <h2 className="text-base font-bold text-[#072C73]">Frequentation cette semaine</h2>
           </div>
           {weeklyQuery.isLoading ? (
             <LoadingSkeleton rows={5} />
@@ -56,7 +67,7 @@ export function Dashboard() {
         </section>
 
         <section className="surface p-5">
-          <h2 className="text-base font-bold text-[#1E3A5F]">Taux d'absence mensuel</h2>
+          <h2 className="text-base font-bold text-[#072C73]">Taux d'absence mensuel</h2>
           <div className="mt-4 h-[260px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -67,14 +78,14 @@ export function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="text-center text-3xl font-bold text-[#1E3A5F]">{stats?.taux_absence_mois ?? 0}%</div>
+          <div className="text-center text-3xl font-bold text-[#072C73]">{stats?.taux_absence_mois ?? 0}%</div>
         </section>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <section className="surface overflow-hidden">
           <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-bold text-[#1E3A5F]">Seances du jour</h2>
+            <h2 className="text-base font-bold text-[#072C73]">Seances du jour</h2>
           </div>
           {statsQuery.isLoading ? (
             <div className="p-5"><LoadingSkeleton rows={4} /></div>
@@ -84,7 +95,7 @@ export function Dashboard() {
                 <tbody>
                   {(stats?.seances_du_jour ?? []).map((seance) => (
                     <tr key={seance.id} className="border-b border-slate-100 last:border-b-0">
-                      <td className="px-5 py-3 text-sm font-bold text-[#1E3A5F]">{seance.patient?.nom_complet}</td>
+                      <td className="px-5 py-3 text-sm font-bold text-[#072C73]">{seance.patient?.nom_complet}</td>
                       <td className="px-5 py-3 text-sm text-slate-600">{seance.heure_debut} - {seance.machine?.numero}</td>
                       <td className="px-5 py-3"><StatusBadge type="seance" value={seance.statut} /></td>
                     </tr>
@@ -99,13 +110,13 @@ export function Dashboard() {
         </section>
 
         <section className="surface p-5">
-          <h2 className="text-base font-bold text-[#1E3A5F]">Alertes absences</h2>
+          <h2 className="text-base font-bold text-[#072C73]">Alertes absences</h2>
           <div className="mt-4 space-y-3">
             {alertsQuery.isLoading && <LoadingSkeleton rows={3} />}
             {(alertsQuery.data ?? []).map((alert) => (
               <div key={alert.patient_id} className="rounded-md border border-red-100 bg-red-50 p-3">
                 <div className="flex items-center justify-between gap-3">
-                  <div className="font-bold text-[#1E3A5F]">{alert.patient}</div>
+                  <div className="font-bold text-[#072C73]">{alert.patient}</div>
                   <span className="text-sm font-bold text-[#DC2626]">{alert.nombre_absences}</span>
                 </div>
                 <div className="mt-1 text-xs text-slate-600">{alert.cin} - derniere: {formatDate(alert.derniere_absence)}</div>
@@ -121,7 +132,7 @@ export function Dashboard() {
 
 function StatCard({ icon: Icon, label, value, loading, tone }: { icon: ElementType; label: string; value?: number; loading?: boolean; tone: 'blue' | 'amber' | 'red' | 'green' | 'slate' }) {
   const toneClass = {
-    blue: 'bg-blue-50 text-[#2563EB]',
+    blue: 'bg-blue-50 text-[#2F7ED8]',
     amber: 'bg-amber-50 text-[#D97706]',
     red: 'bg-red-50 text-[#DC2626]',
     green: 'bg-green-50 text-[#16A34A]',
@@ -133,7 +144,7 @@ function StatCard({ icon: Icon, label, value, loading, tone }: { icon: ElementTy
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-slate-500">{label}</p>
-          <div className="mt-2 text-3xl font-bold text-[#1E3A5F]">{loading ? '-' : formatNumber(value ?? 0)}</div>
+          <div className="mt-2 text-3xl font-bold text-[#072C73]">{loading ? '-' : formatNumber(value ?? 0)}</div>
         </div>
         <div className={`grid h-12 w-12 place-items-center rounded-lg ${toneClass}`}>
           <Icon className="h-6 w-6" />

@@ -107,7 +107,7 @@ export function SeanceForm({ open, seance, patients, machines, nurses, initialSl
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 px-4 py-8">
       <div role="dialog" aria-modal="true" className="mx-auto w-full max-w-4xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{seance ? 'Modifier seance' : 'Nouvelle seance'}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{seance ? 'Modifier seance' : 'Nouvelle seance'}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>
@@ -160,7 +160,7 @@ export function SeanceForm({ open, seance, patients, machines, nurses, initialSl
             </div>
             <div className="flex gap-2">
               <button type="button" onClick={onClose} className="rounded-md border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">Annuler</button>
-              <button type="submit" disabled={loading} className="rounded-md bg-[#2563EB] px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60">
+              <button type="submit" disabled={loading} className="rounded-md bg-[#0A4FAF] px-4 py-2 text-sm font-bold text-white hover:bg-[#072C73] disabled:opacity-60">
                 {loading ? 'Enregistrement...' : 'Enregistrer'}
               </button>
             </div>

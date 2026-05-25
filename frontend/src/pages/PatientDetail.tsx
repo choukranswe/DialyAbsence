@@ -71,12 +71,12 @@ export function PatientDetail() {
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-base font-bold text-[#1E3A5F]">Historique seances</h2>
+        <h2 className="text-base font-bold text-[#072C73]">Historique seances</h2>
         <DataTable data={seancesQuery.data?.data ?? []} columns={seanceColumns} getRowKey={(seance) => seance.id} loading={seancesQuery.isLoading} empty={<div className="surface p-6 text-sm text-slate-500">Aucune seance.</div>} />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base font-bold text-[#1E3A5F]">Absences</h2>
+        <h2 className="text-base font-bold text-[#072C73]">Absences</h2>
         <DataTable data={absencesQuery.data?.data ?? []} columns={absenceColumns} getRowKey={(absence) => absence.id} loading={absencesQuery.isLoading} empty={<div className="surface p-6 text-sm text-slate-500">Aucune absence.</div>} />
       </section>
     </div>
@@ -87,7 +87,7 @@ function Metric({ label, value, danger }: { label: string; value: string | numbe
   return (
     <div className="surface p-5">
       <div className="text-sm font-semibold text-slate-500">{label}</div>
-      <div className={`mt-2 text-2xl font-bold ${danger ? 'text-[#DC2626]' : 'text-[#1E3A5F]'}`}>{value}</div>
+      <div className={`mt-2 text-2xl font-bold ${danger ? 'text-[#DC2626]' : 'text-[#072C73]'}`}>{value}</div>
     </div>
   );
 }

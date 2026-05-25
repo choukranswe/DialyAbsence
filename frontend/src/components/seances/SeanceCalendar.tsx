@@ -25,7 +25,7 @@ export function SeanceCalendar({ startDate, seances, onEdit, onCreate }: SeanceC
         <div className="px-4 py-3 text-xs font-bold uppercase text-slate-500">Shift</div>
         {days.map((day) => (
           <div key={day.iso} className="border-l border-slate-200 px-4 py-3">
-            <div className="text-sm font-bold text-[#1E3A5F]">{day.label}</div>
+            <div className="text-sm font-bold text-[#072C73]">{day.label}</div>
             <div className="text-xs text-slate-500">{day.display}</div>
           </div>
         ))}
@@ -34,7 +34,7 @@ export function SeanceCalendar({ startDate, seances, onEdit, onCreate }: SeanceC
       {shifts.map((shift) => (
         <div key={shift.key} className="grid min-h-[150px] grid-cols-[150px_repeat(6,minmax(150px,1fr))] border-b border-slate-100 last:border-b-0">
           <div className="flex flex-col justify-center gap-2 bg-slate-50 px-4">
-            <div className="font-bold text-[#1E3A5F]">{shift.label}</div>
+            <div className="font-bold text-[#072C73]">{shift.label}</div>
             <div className="flex items-center gap-1 text-xs text-slate-500">
               <Clock className="h-3.5 w-3.5" />
               {shift.start} - {shift.end}
@@ -47,7 +47,7 @@ export function SeanceCalendar({ startDate, seances, onEdit, onCreate }: SeanceC
                 <button
                   type="button"
                   onClick={() => onCreate(day.iso, shift.start, shift.end)}
-                  className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-dashed border-slate-300 text-xs font-bold text-slate-500 transition hover:border-[#2563EB] hover:text-[#2563EB]"
+                  className="flex h-8 w-full items-center justify-center gap-2 rounded-md border border-dashed border-slate-300 text-xs font-bold text-slate-500 transition hover:border-[#0A4FAF] hover:text-[#0A4FAF]"
                 >
                   <CalendarPlus className="h-4 w-4" />
                   Ajouter
@@ -64,7 +64,7 @@ export function SeanceCalendar({ startDate, seances, onEdit, onCreate }: SeanceC
                       seance.statut === 'annulee' && 'border-red-200 bg-red-50',
                     )}
                   >
-                    <div className="truncate text-sm font-bold text-[#1E3A5F]">{seance.patient?.nom_complet}</div>
+                    <div className="truncate text-sm font-bold text-[#072C73]">{seance.patient?.nom_complet}</div>
                     <div className="mt-1 flex items-center gap-1 text-xs text-slate-600">
                       <Monitor className="h-3.5 w-3.5" />
                       {seance.machine?.numero} - {seance.nurse?.full_name ?? 'Non assigne'}

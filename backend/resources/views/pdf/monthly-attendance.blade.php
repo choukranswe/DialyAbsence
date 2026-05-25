@@ -5,13 +5,16 @@
     <title>Rapport mensuel de presence</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; color: #0f172a; font-size: 11px; }
-        h1 { color: #1e3a5f; margin: 0 0 4px; font-size: 22px; }
-        h2 { color: #1e3a5f; margin: 18px 0 8px; font-size: 14px; }
+        h1 { color: #072c73; margin: 0 0 4px; font-size: 22px; }
+        h2 { color: #072c73; margin: 18px 0 8px; font-size: 14px; }
         .muted { color: #64748b; }
+        .report-header { border-bottom: 2px solid #0a4faf; margin-bottom: 14px; padding-bottom: 10px; }
+        .logo { height: 46px; margin-bottom: 8px; }
+        .center-name { color: #072c73; font-weight: bold; }
         .summary { width: 100%; margin: 16px 0; border-collapse: collapse; }
         .summary td { border: 1px solid #cbd5e1; padding: 9px; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #1e3a5f; color: #fff; text-align: left; padding: 7px; }
+        th { background: #0a4faf; color: #fff; text-align: left; padding: 7px; }
         td { border: 1px solid #dbe3ef; padding: 6px; vertical-align: top; }
         .status { font-weight: bold; text-transform: uppercase; }
         .effectuee { color: #16a34a; }
@@ -21,8 +24,17 @@
     </style>
 </head>
 <body>
-    <h1>Rapport mensuel de presence</h1>
-    <div class="muted">{{ config('app.name') }} - {{ $period }}@if ($organisme) - Organisme: {{ $organisme }}@endif</div>
+    @php($center = config('center'))
+    @php($logo = is_file($center['logo_path']) ? 'data:image/png;base64,'.base64_encode(file_get_contents($center['logo_path'])) : null)
+
+    <div class="report-header">
+        @if ($logo)
+            <img class="logo" src="{{ $logo }}" alt="{{ $center['name'] }}">
+        @endif
+        <h1>Rapport mensuel de presence</h1>
+        <div class="muted"><span class="center-name">{{ $center['name'] }}</span> - {{ $center['city'] }} - Médecin responsable: {{ $center['responsible_doctor'] }}</div>
+        <div class="muted">{{ $period }}@if ($organisme) - Organisme: {{ $organisme }}@endif</div>
+    </div>
 
     <table class="summary">
         <tr>
@@ -65,6 +77,6 @@
         </tbody>
     </table>
 
-    <div class="footer">Document genere le {{ now()->format('d/m/Y H:i') }}</div>
+    <div class="footer">{{ $center['name'] }} - {{ $center['city'] }} - Document genere le {{ now()->format('d/m/Y H:i') }}</div>
 </body>
 </html>

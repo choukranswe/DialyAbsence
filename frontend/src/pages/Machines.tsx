@@ -74,7 +74,7 @@ export function Machines() {
             <section key={machine.id} className="surface p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-bold text-[#1E3A5F]">{machine.numero}</h2>
+                  <h2 className="text-xl font-bold text-[#072C73]">{machine.numero}</h2>
                   <p className="text-sm text-slate-500">{machine.marque} {machine.modele}</p>
                 </div>
                 <StatusBadge type="machine" value={machine.statut} />
@@ -126,7 +126,7 @@ function MachineDialog({ open, machine, loading, onSubmit, onClose }: { open: bo
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 px-4">
       <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{machine ? 'Modifier machine' : 'Nouvelle machine'}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{machine ? 'Modifier machine' : 'Nouvelle machine'}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>

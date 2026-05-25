@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { usePermissions } from '../../hooks/usePermissions';
+import { centerBranding } from '../../lib/branding';
 
 const links = [
   { to: '/dashboard', label: 'Tableau', icon: BarChart3 },
@@ -37,25 +38,36 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 flex flex-col border-r border-slate-200 bg-[#1E3A5F] text-white transition-all duration-200',
+        'fixed inset-y-0 left-0 z-30 flex flex-col border-r border-slate-200 bg-[#072C73] text-white transition-all duration-200',
         collapsed ? 'w-[76px]' : 'w-[252px]',
       )}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-4">
+      <div
+        className={cn(
+          'border-b border-white/10 px-3 py-4',
+          collapsed ? 'flex h-20 items-center justify-center' : 'flex h-20 items-center gap-3',
+        )}
+      >
+        {!collapsed && (
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <img className="h-12 w-12 shrink-0 object-contain" src={centerBranding.iconPath} alt="" aria-hidden="true" />
+            <div className="flex h-12 min-w-0 flex-col justify-center">
+              <div className="truncate text-xs font-semibold leading-4 text-blue-100">{centerBranding.nameLines[0]}</div>
+              <div className="truncate text-base font-extrabold leading-5 text-white">{centerBranding.nameLines[1]}</div>
+            </div>
+          </div>
+        )}
         <button
           type="button"
           onClick={onToggle}
-          className="grid h-10 w-10 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+          className={cn(
+            'grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10',
+            collapsed ? 'mx-auto' : 'ml-auto',
+          )}
           title="Basculer le menu"
         >
           <Menu className="h-5 w-5" />
         </button>
-        {!collapsed && (
-          <div className="min-w-0">
-            <div className="truncate text-sm font-bold">Centre de Dialyse</div>
-            <div className="truncate text-xs text-blue-100">Gestion clinique</div>
-          </div>
-        )}
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
@@ -67,7 +79,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             className={({ isActive }) =>
               cn(
                 'flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition',
-                isActive ? 'bg-white text-[#1E3A5F] shadow-sm' : 'text-blue-50 hover:bg-white/10',
+                isActive ? 'bg-white text-[#072C73] shadow-sm' : 'text-blue-50 hover:bg-white/10',
                 collapsed && 'justify-center px-0',
               )
             }
@@ -77,6 +89,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </NavLink>
         ))}
       </nav>
+
+      {!collapsed && (
+        <div className="border-t border-white/10 px-4 py-4 text-xs text-blue-100">
+          <div className="font-bold text-white">{centerBranding.name}</div>
+          <div className="mt-1">Médecin {centerBranding.responsibleDoctor}</div>
+          <div>{centerBranding.city}</div>
+          <div>Version 1.0</div>
+        </div>
+      )}
     </aside>
   );
 }

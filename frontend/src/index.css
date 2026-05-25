@@ -40,7 +40,7 @@ button:disabled {
 
 @layer components {
   .input {
-    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#2563EB] focus:ring-2 focus:ring-blue-100;
+    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#0A4FAF] focus:ring-2 focus:ring-blue-100;
   }
 
   .label {
@@ -48,7 +48,7 @@ button:disabled {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md bg-[#2563EB] px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-700 disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-[#0A4FAF] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#072C73] disabled:opacity-60;
   }
 
   .btn-secondary {

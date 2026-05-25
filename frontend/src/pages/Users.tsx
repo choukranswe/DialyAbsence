@@ -70,8 +70,8 @@ export function Users() {
   });
 
   const columns: DataColumn<User>[] = [
-    { key: 'name', header: 'Utilisateur', sortable: true, sortValue: (user) => user.nom_complet, render: (user) => <div><div className="font-bold text-[#1E3A5F]">{user.nom_complet}</div><div className="text-xs text-slate-500">{user.email}</div></div> },
-    { key: 'role', header: 'Role', render: (user) => <span className="rounded bg-blue-50 px-2 py-1 text-xs font-bold uppercase text-[#1E3A5F]">{user.role}</span> },
+    { key: 'name', header: 'Utilisateur', sortable: true, sortValue: (user) => user.nom_complet, render: (user) => <div><div className="font-bold text-[#072C73]">{user.nom_complet}</div><div className="text-xs text-slate-500">{user.email}</div></div> },
+    { key: 'role', header: 'Role', render: (user) => <span className="rounded bg-blue-50 px-2 py-1 text-xs font-bold uppercase text-[#072C73]">{user.role}</span> },
     { key: 'phone', header: 'Telephone', render: (user) => user.telephone ?? '-' },
     { key: 'actif', header: 'Statut', render: (user) => <StatusBadge type="patient" value={user.actif} /> },
     {
@@ -165,7 +165,7 @@ function UserDialog({ open, user, loading, onSubmit, onClose }: { open: boolean;
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 px-4">
       <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{user ? 'Modifier utilisateur' : 'Nouvel utilisateur'}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{user ? 'Modifier utilisateur' : 'Nouvel utilisateur'}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>

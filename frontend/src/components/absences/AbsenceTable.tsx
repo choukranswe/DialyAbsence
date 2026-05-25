@@ -33,7 +33,7 @@ export function AbsenceTable({ absences, loading, page, lastPage, total, onPageC
       sortValue: (absence) => absence.patient?.nom_complet,
       render: (absence) => (
         <div>
-          <div className="font-bold text-[#1E3A5F]">{absence.patient?.nom_complet}</div>
+          <div className="font-bold text-[#072C73]">{absence.patient?.nom_complet}</div>
           <div className="text-xs text-slate-500">{absence.patient?.cin}</div>
         </div>
       ),

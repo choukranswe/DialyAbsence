@@ -77,7 +77,7 @@ export function Nurses() {
       sortValue: (nurse) => nurse.full_name,
       render: (nurse) => (
         <div>
-          <div className="font-bold text-[#1E3A5F]">{nurse.full_name}</div>
+          <div className="font-bold text-[#072C73]">{nurse.full_name}</div>
           <div className="text-xs text-slate-500">{nurse.phone ?? '-'}</div>
         </div>
       ),
@@ -91,7 +91,7 @@ export function Nurses() {
       className: 'w-[150px]',
       render: (nurse) => (
         <div className="flex items-center gap-1">
-          <button type="button" className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-blue-50 hover:text-[#2563EB]" onClick={() => setDetails(nurse)} title="Voir">
+          <button type="button" className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-blue-50 hover:text-[#0A4FAF]" onClick={() => setDetails(nurse)} title="Voir">
             <Eye className="h-4 w-4" />
           </button>
           <button type="button" className="grid h-9 w-9 place-items-center rounded-md text-slate-600 hover:bg-amber-50 hover:text-[#D97706]" onClick={() => { setSelected(nurse); setFormOpen(true); }} title="Modifier">
@@ -180,7 +180,7 @@ function NurseDialog({ open, nurse, loading, onSubmit, onClose }: { open: boolea
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 px-4">
       <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{nurse ? 'Modifier infirmier' : 'Nouvel infirmier'}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{nurse ? 'Modifier infirmier' : 'Nouvel infirmier'}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>
@@ -210,7 +210,7 @@ function NurseDetails({ nurse, onClose }: { nurse: Nurse | null; onClose: () => 
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 px-4">
       <div role="dialog" aria-modal="true" className="w-full max-w-xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{nurse.full_name}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{nurse.full_name}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>

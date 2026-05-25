@@ -90,7 +90,7 @@ export function PatientImportDialog({ open, loading, onImport, onClose }: Patien
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 px-4 py-8">
       <div role="dialog" aria-modal="true" aria-labelledby="patient-import-title" className="mx-auto w-full max-w-xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <h2 id="patient-import-title" className="text-lg font-bold text-[#1E3A5F]">Importer les patients</h2>
+          <h2 id="patient-import-title" className="text-lg font-bold text-[#072C73]">Importer les patients</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>
@@ -103,10 +103,10 @@ export function PatientImportDialog({ open, loading, onImport, onClose }: Patien
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`flex min-h-52 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-4 py-8 text-center transition ${
-              dragActive ? 'border-[#2563EB] bg-blue-50' : 'border-slate-300 bg-slate-50 hover:border-[#2563EB] hover:bg-blue-50/40'
+              dragActive ? 'border-[#0A4FAF] bg-blue-50' : 'border-slate-300 bg-slate-50 hover:border-[#0A4FAF] hover:bg-blue-50/40'
             }`}
           >
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-white text-[#2563EB] shadow-sm">
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-white text-[#0A4FAF] shadow-sm">
               <Upload className="h-6 w-6" />
             </span>
             <span className="mt-4 text-sm font-bold text-slate-800">

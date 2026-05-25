@@ -24,7 +24,8 @@ const schema = z.object({
   notes: z.string().optional().nullable(),
 });
 
-type LeaveValues = z.infer<typeof schema>;
+type LeaveFormInput = z.input<typeof schema>;
+type LeaveValues = z.output<typeof schema>;
 
 const defaults: LeaveValues = {
   nurse_id: 0,
@@ -87,7 +88,7 @@ export function StaffLeaves() {
       sortValue: (leave) => leave.nurse?.full_name ?? '',
       render: (leave) => (
         <div>
-          <div className="font-bold text-[#1E3A5F]">{leave.nurse?.full_name ?? '-'}</div>
+          <div className="font-bold text-[#072C73]">{leave.nurse?.full_name ?? '-'}</div>
           <div className="text-xs text-slate-500">{leave.nurse?.shift ?? '-'}</div>
         </div>
       ),
@@ -183,7 +184,7 @@ function LeaveCalendar({ month, leaves, onMonthChange }: { month: string; leaves
   return (
     <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
       <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-        <div className="flex items-center gap-2 font-bold text-[#1E3A5F]">
+        <div className="flex items-center gap-2 font-bold text-[#072C73]">
           <CalendarDays className="h-5 w-5" />
           Calendrier des conges
         </div>
@@ -208,7 +209,7 @@ function LeaveCalendar({ month, leaves, onMonthChange }: { month: string; leaves
               {day.iso && <div className="text-xs font-bold text-slate-500">{Number(day.iso.slice(-2))}</div>}
               <div className="mt-2 space-y-1">
                 {dayLeaves.slice(0, 3).map((leave) => (
-                  <div key={leave.id} className="truncate rounded bg-blue-50 px-2 py-1 text-xs font-semibold text-[#1E3A5F]" title={leave.nurse?.full_name}>
+                  <div key={leave.id} className="truncate rounded bg-blue-50 px-2 py-1 text-xs font-semibold text-[#072C73]" title={leave.nurse?.full_name}>
                     {leave.nurse?.full_name}
                   </div>
                 ))}
@@ -228,7 +229,7 @@ function LeaveDialog({ open, leave, nurses, loading, onSubmit, onClose }: { open
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<LeaveValues>({ resolver: zodResolver(schema), defaultValues: defaults });
+  } = useForm<LeaveFormInput, unknown, LeaveValues>({ resolver: zodResolver(schema), defaultValues: defaults });
 
   useEffect(() => {
     reset(leave ? toPayload(leave) : defaults);
@@ -240,7 +241,7 @@ function LeaveDialog({ open, leave, nurses, loading, onSubmit, onClose }: { open
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 px-4 py-8">
       <div role="dialog" aria-modal="true" className="mx-auto w-full max-w-3xl rounded-lg border border-slate-200 bg-white shadow-clinic">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-bold text-[#1E3A5F]">{leave ? 'Modifier conge' : 'Nouvelle demande de conge'}</h2>
+          <h2 className="text-lg font-bold text-[#072C73]">{leave ? 'Modifier conge' : 'Nouvelle demande de conge'}</h2>
           <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="Fermer">
             <X className="h-5 w-5" />
           </button>

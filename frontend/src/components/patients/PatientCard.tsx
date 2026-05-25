@@ -22,7 +22,7 @@ export function PatientCard({ patient }: { patient: Patient }) {
     <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-clinic">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#1E3A5F]">{patient.nom_complet}</h2>
+          <h2 className="text-xl font-bold text-[#072C73]">{patient.nom_complet}</h2>
           <p className="text-sm text-slate-500">
             {patient.age} ans - {patient.sexe === 'M' ? 'Masculin' : 'Feminin'}
           </p>

@@ -1,13 +1,14 @@
-# DialyAbsence - Centre de Dialyse les Chenes
+# DialyAbsence - Centre de Dialyse les Chênes
 
-Secure local-network web application for Centre de Dialyse les Chenes to manage patients, dialysis sessions, patient absences, nursing staff, staff leave, reports, users, and audit logs.
+Secure local-network web application for Centre de Dialyse les Chênes in Benslimane to manage patients, dialysis sessions, patient absences, nursing staff, staff leave, reports, users, and audit logs.
 
 The app is intended to run inside the dialysis center only. Do not expose the frontend, backend, or database directly to the public internet.
 
 ## Scope
 
 - Login users: Admin, Doctor, Receptionist only.
-- Center doctor: Dr Mouna Mjabber.
+- Médecin responsable: Dr Mouna Mjabber.
+- Ville: Benslimane.
 - Nurses are not login users. They are managed in the Personnel Infirmier module.
 - Personnel Infirmier: list, add, edit, archive, and view nurse details.
 - Conges du personnel: create/edit leave requests, approve/refuse leave, calendar, history, and filters by nurse/date.
