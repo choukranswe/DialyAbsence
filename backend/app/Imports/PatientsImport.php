@@ -17,6 +17,8 @@ use Throwable;
 
 class PatientsImport implements ToCollection, WithHeadingRow
 {
+    private const ORGANISMES = ['CNSS', 'CNOPS', 'AMO', 'AMO&CNSS', 'FAR', 'Assurance privée', 'Sans couverture'];
+
     private int $created = 0;
 
     private array $errors = [];
@@ -48,7 +50,7 @@ class PatientsImport implements ToCollection, WithHeadingRow
                 'taille' => ['nullable', 'integer', 'between:30,250'],
                 'date_entree' => ['nullable', 'date'],
                 'emergency_contact' => ['nullable', 'string', 'max:120'],
-                'organisme' => ['nullable', Rule::in(['CNSS', 'CNOPS', 'AMO', 'Assurance privée', 'Sans couverture'])],
+                'organisme' => ['nullable', Rule::in(self::ORGANISMES)],
                 'insurance_number' => ['nullable', 'string', 'max:120'],
                 'dialysis_group' => ['nullable', Rule::in(['L/M/V', 'M/J/S'])],
                 'coverage_type' => ['nullable', 'string', 'max:120'],
@@ -288,6 +290,8 @@ class PatientsImport implements ToCollection, WithHeadingRow
             'cnops' => 'CNOPS',
             'ramed' => 'RAMED',
             'amo' => 'AMO',
+            'amo&cnss', 'amo cnss', 'amo/cnss', 'amo et cnss' => 'AMO&CNSS',
+            'far' => 'FAR',
             'assurance privee', 'assurance prive', 'private insurance' => 'Assurance privée',
             'sans couverture', 'aucune', 'none' => 'Sans couverture',
             default => $text,

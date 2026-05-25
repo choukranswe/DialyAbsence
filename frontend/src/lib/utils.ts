@@ -69,6 +69,8 @@ export const organismeOptions = [
   { value: 'CNSS', label: 'CNSS' },
   { value: 'CNOPS', label: 'CNOPS' },
   { value: 'AMO', label: 'AMO' },
+  { value: 'AMO&CNSS', label: 'AMO&CNSS' },
+  { value: 'FAR', label: 'FAR' },
   { value: 'Assurance privée', label: 'Assurance privée' },
   { value: 'Sans couverture', label: 'Sans couverture' },
 ];

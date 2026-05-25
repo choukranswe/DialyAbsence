@@ -6,6 +6,8 @@ use Illuminate\Validation\Rule;
 
 class StorePatientRequest extends BaseApiRequest
 {
+    private const ORGANISMES = ['CNSS', 'CNOPS', 'AMO', 'AMO&CNSS', 'FAR', 'Assurance privée', 'Sans couverture'];
+
     protected function prepareForValidation(): void
     {
         $this->merge([
@@ -43,7 +45,7 @@ class StorePatientRequest extends BaseApiRequest
             'date_entree' => ['required', 'date'],
             'actif' => ['boolean'],
             'notes' => ['nullable', 'string'],
-            'organisme' => ['nullable', Rule::in(['CNSS', 'CNOPS', 'AMO', 'Assurance privée', 'Sans couverture'])],
+            'organisme' => ['nullable', Rule::in(self::ORGANISMES)],
             'insurance_number' => ['nullable', 'string', 'max:120'],
             'dialysis_group' => ['nullable', Rule::in(['L/M/V', 'M/J/S'])],
             'assigned_machine_id' => ['nullable', 'exists:machines,id'],
