@@ -1,5 +1,5 @@
 import { CalendarPlus, Clock, Monitor } from 'lucide-react';
-import { cn, seanceLabels } from '../../lib/utils';
+import { cn, seanceLabels, toIsoDate } from '../../lib/utils';
 import type { Seance } from '../../types';
 import { StatusBadge } from '../shared/StatusBadge';
 
@@ -91,7 +91,7 @@ function weekDays(startDate: string) {
     const day = new Date(start);
     day.setDate(start.getDate() + index);
     return {
-      iso: day.toISOString().slice(0, 10),
+      iso: toIsoDate(day),
       label: new Intl.DateTimeFormat('fr-MA', { weekday: 'long' }).format(day),
       display: new Intl.DateTimeFormat('fr-MA', { day: '2-digit', month: 'short' }).format(day),
     };

@@ -40,7 +40,7 @@ class DashboardController extends Controller
             'seances_aujourdhui' => Seance::whereDate('date_seance', today())->count(),
             'absences_ce_mois' => $monthlyAbsences,
             'machines_disponibles' => Machine::where('statut', 'disponible')->count(),
-            'taux_absence_mois' => $monthlySeances + $monthlyAbsences === 0 ? 0 : round(($monthlyAbsences / ($monthlySeances + $monthlyAbsences)) * 100, 2),
+            'taux_absence_mois' => $monthlySeances === 0 ? 0 : round(($monthlyAbsences / $monthlySeances) * 100, 2),
             'seances_du_jour' => SeanceResource::collection(Seance::with(['patient', 'machine', 'nurse'])->whereDate('date_seance', today())->orderBy('heure_debut')->get())->resolve(request()),
         ], 'Statistiques tableau de bord recuperees');
     }

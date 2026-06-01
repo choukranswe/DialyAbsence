@@ -9,6 +9,7 @@ import { createSeance, deleteSeance, fetchWeekSeances, updateSeance } from '../a
 import { SeanceCalendar } from '../components/seances/SeanceCalendar';
 import { SeanceForm } from '../components/seances/SeanceForm';
 import { ConfirmDialog } from '../components/shared/ConfirmDialog';
+import { toIsoDate } from '../lib/utils';
 import type { Seance, SeancePayload } from '../types';
 
 export function Seances() {
@@ -106,11 +107,11 @@ function startOfWeek(date: Date): string {
   const diff = day === 0 ? -6 : 1 - day;
   const monday = new Date(date);
   monday.setDate(date.getDate() + diff);
-  return monday.toISOString().slice(0, 10);
+  return toIsoDate(monday);
 }
 
 function addDays(value: string, days: number): string {
   const date = new Date(`${value}T00:00:00`);
   date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+  return toIsoDate(date);
 }
